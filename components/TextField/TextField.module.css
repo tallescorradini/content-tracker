@@ -1,0 +1,23 @@
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field > label {
+  font-size: 1rem;
+  color: #efefef;
+}
+
+.field > input {
+  margin-top: 0.5rem;
+
+  padding: 1rem;
+  outline: none;
+  border-style: none;
+  border-radius: 0.25rem;
+  background-color: #121212;
+
+  font-family: inherit;
+  font-size: 1rem;
+  color: #efefef;
+}

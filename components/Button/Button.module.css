@@ -1,0 +1,31 @@
+.button {
+  padding: 1rem;
+
+  border-style: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+
+  text-transform: uppercase;
+}
+
+.primary {
+  background-color: hsla(174, 60%, 50%);
+
+  font-size: 1rem;
+  font-weight: bold;
+  color: #121212;
+
+  transition: background-color 0.2s ease;
+}
+
+.primary:hover {
+  background-color: hsla(174, 80%, 50%);
+
+  transition: background-color 0.2s ease;
+}
+
+.primary:active {
+  background-color: hsla(174, 100%, 50%);
+
+  transition: background-color 0.2s ease;
+}

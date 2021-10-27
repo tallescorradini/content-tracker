@@ -1,6 +1,10 @@
 import Head from "next/head";
-import Image from "next/image";
+
 import styles from "../styles/Home.module.css";
+import { Box } from "../components/Box/Box";
+import { Form } from "../components/Form/Form";
+import { TextField } from "../components/TextField/TextField";
+import { Button } from "../components/Button/Button";
 
 export default function Home() {
   return (
@@ -20,7 +24,22 @@ export default function Home() {
           Youtube channels
         </h1>
 
-        {/* <Start/> */}
+        <Box style={{ width: "400px" }}>
+          <h2 style={{ margin: "0 0 2rem 0" }}>
+            Insert any Youtube channel URL to start
+          </h2>
+          <Form
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          >
+            <TextField label="URL" name="url" />
+
+            <Button variant="primary" type="submit">
+              Continue
+            </Button>
+          </Form>
+        </Box>
         {/* <Login/> */}
       </main>
     </div>
