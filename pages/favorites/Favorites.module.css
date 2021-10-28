@@ -1,0 +1,84 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 4rem;
+}
+.page > * {
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+.header > h1 {
+  margin: 0;
+}
+.header > button {
+  max-height: 2rem;
+  padding: 0.5rem 1.5rem;
+}
+
+.alert {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 1rem;
+  border-radius: 0.25rem;
+
+  background-color: hsl(340, 25%, 20%);
+}
+.alert > p {
+  margin: 0;
+}
+.alert > button {
+  max-height: 2rem;
+  padding: 0.5rem 1.5rem;
+}
+
+.folder {
+  display: flex;
+  flex-direction: column;
+}
+
+.folderHeader {
+  display: flex;
+  justify-content: space-between;
+}
+.folderHeader > button {
+  max-height: 2rem;
+  padding: 0.5rem 1.5rem;
+}
+
+.folderTitle {
+  display: inline;
+}
+
+.channelList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+
+  margin: 0;
+
+  padding: 0;
+  border-radius: 0.25rem;
+  background-color: hsl(0, 0%, 12%);
+
+  list-style-type: none;
+}
+.channel {
+  display: inline-block;
+
+  margin: 1.5rem;
+
+  cursor: pointer;
+}
+.channelName {
+  margin: 0;
+
+  text-align: center;
+}
