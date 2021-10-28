@@ -45,3 +45,21 @@
 
   transition: background-color 0.2s ease;
 }
+
+.neutral {
+  background-color: hsl(0, 0%, 12%);
+
+  color: #efefef;
+
+  transition: background-color 0.2s ease;
+}
+.neutral:hover {
+  background-color: hsl(0, 0%, 20%);
+
+  transition: background-color 0.2s ease;
+}
+.neutral:active {
+  background-color: hsl(0, 0%, 30%);
+
+  transition: background-color 0.2s ease;
+}
