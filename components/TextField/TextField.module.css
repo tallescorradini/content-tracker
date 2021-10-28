@@ -21,3 +21,23 @@
   font-size: 1rem;
   color: #efefef;
 }
+
+.errorMessage {
+  margin: 0;
+  margin-top: 0.25rem;
+  padding: 0;
+
+  list-style-type: none;
+
+  text-align: left;
+}
+
+.errorMessage > li {
+  display: inline;
+
+  height: 100%;
+  margin: auto;
+
+  color: #f13f3f;
+  font-size: 0.75rem;
+}
