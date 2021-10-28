@@ -2,12 +2,15 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import useForm from "../hooks/useForm";
 import * as yup from "yup";
+import axios from "axios";
+import { useState } from "react";
 
 import styles from "../styles/Home.module.css";
 import { Box } from "../components/Box/Box";
 import { Form } from "../components/Form/Form";
 import { TextField } from "../components/TextField/TextField";
 import { Button } from "../components/Button/Button";
+import { Alert } from "../components/Alert/Alert";
 
 const formFields = {
   url: {
@@ -20,16 +23,43 @@ const formFields = {
   },
 };
 
+const errorMessages = {
+  invalid_id: "Desculpe, não encontramos o canal informado. ",
+  unknown: "Desculpe, algo deu errado. ",
+};
+
 export default function Home() {
   const router = useRouter();
   const { subscribe, onSubmit, values } = useForm(yup);
+  const [showAlert, setShowAlert] = useState({ message: "" });
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    router.push({
-      pathname: "/favorites",
-      query: { url: values.url },
-    });
+    const channelId = getChannelId(values.url);
+
+    try {
+      const { data } = await axios.get("/api/favorites", {
+        params: { channelId: channelId },
+      });
+
+      router.push({
+        pathname: "/favorites",
+        query: { channelId: channelId },
+      });
+    } catch (error) {
+      const errorCode = error.response.data?.code;
+
+      setShowAlert({
+        message: errorMessages[errorCode] || errorMessages["unknown"],
+      });
+    }
+  }
+
+  function getChannelId(url) {
+    if (!url) return;
+    const [channelId] = url.split("/").slice(-1);
+
+    return channelId;
   }
 
   return (
@@ -53,6 +83,15 @@ export default function Home() {
           <h2 style={{ margin: "0 0 2rem 0" }}>
             Insert any Youtube channel URL to start
           </h2>
+
+          {showAlert.message ? (
+            <Alert
+              message={showAlert.message}
+              onDismiss={() => setShowAlert(false)}
+              style={{ marginBottom: "2rem" }}
+            />
+          ) : null}
+
           <Form {...onSubmit(handleSubmit)}>
             <TextField {...subscribe(formFields.url)} />
 
@@ -61,6 +100,7 @@ export default function Home() {
             </Button>
           </Form>
         </Box>
+
         {/* <Login/> */}
       </main>
     </div>
