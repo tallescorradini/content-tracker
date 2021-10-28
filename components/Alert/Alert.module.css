@@ -1,0 +1,67 @@
+.alert {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 1rem;
+
+  border-radius: 0.25rem;
+  background-color: hsl(340, 25%, 20%);
+
+  text-align: left;
+  color: #efefef;
+}
+.alert button {
+  position: relative;
+
+  height: 2rem;
+  width: 2rem;
+  min-height: 2rem;
+  min-width: 2rem;
+  border-style: none;
+  background-color: transparent;
+
+  cursor: pointer;
+}
+
+.alert .iconClose::before,
+.alert .iconClose::after {
+  content: "";
+
+  display: block;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  margin-left: 0.875rem;
+  margin-top: 0.25rem;
+
+  height: 1.5rem;
+  width: 0.25rem;
+  background-color: hsl(340, 60%, 40%);
+
+  border-radius: 0.125rem;
+}
+
+.alert .iconClose::before {
+  transform: rotate(45deg);
+}
+
+.alert .iconClose::after {
+  transform: rotate(-45deg);
+}
+
+.alert:hover .iconClose::before,
+.alert:hover .iconClose::after {
+  background-color: hsl(340, 80%, 40%);
+
+  transition: background-color 0.2s ease;
+}
+
+.alert:active .iconClose::before,
+.alert:active .iconClose::after {
+  background-color: hsl(340, 100%, 40%);
+
+  transition: background-color 0.2s ease;
+}
