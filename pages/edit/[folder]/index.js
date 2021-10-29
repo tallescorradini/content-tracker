@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import Image from "next/image";
 import * as yup from "yup";
 
 import styles from "./EditFolder.module.css";
@@ -6,6 +7,7 @@ import { TextField } from "../../../components/TextField/TextField";
 import { Button } from "../../../components/Button/Button";
 import useForm from "../../../hooks/useForm";
 import { useState } from "react";
+import { useFavorites } from "../../../contexts/favorites-context";
 
 const formFields = {
   folderName: {
@@ -24,6 +26,7 @@ const formFields = {
 
 export default function Folder() {
   const router = useRouter();
+  const { favorites } = useFavorites();
   const { subscribe, onSubmit, values } = useForm(yup);
   const [onEditName, setOnEditName] = useState(false);
   const [activeListItem, setActiveListItem] = useState(null);
@@ -79,15 +82,27 @@ export default function Folder() {
             <Button variant="primary">Add</Button>
           </header>
           <ul className={styles.channelsList}>
-            {["1", "2", "3", "4"].map((channel) => (
+            {favorites.map((channel) => (
               <li
-                onMouseEnter={(e) => setActiveListItem(e["_targetInst"].key)}
-                onMouseLeave={(e) => setActiveListItem(null)}
-                key={channel}
+                onMouseEnter={(e) => {
+                  console.log(e["_targetInst"].key);
+                  setActiveListItem(e["_targetInst"].key);
+                }}
+                onMouseLeave={() => setActiveListItem(null)}
+                key={channel.id}
                 style={{ marginBottom: "1rem" }}
               >
-                <span>Channel</span>
-                {channel === activeListItem ? (
+                <div className={styles.channel}>
+                  <Image
+                    src={channel.thumbnail.url}
+                    alt="Channel thumbnail"
+                    width={24}
+                    height={24}
+                  />
+                  <span>{channel.title}</span>
+                </div>
+
+                {channel.id === activeListItem ? (
                   <Button variant="secondary">Remove</Button>
                 ) : null}
               </li>
