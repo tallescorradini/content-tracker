@@ -11,21 +11,53 @@
 .primary {
   background-color: hsla(174, 60%, 50%);
 
-  font-size: 1rem;
-  font-weight: bold;
   color: #121212;
 
   transition: background-color 0.2s ease;
 }
-
 .primary:hover {
   background-color: hsla(174, 80%, 50%);
 
   transition: background-color 0.2s ease;
 }
-
 .primary:active {
   background-color: hsla(174, 100%, 50%);
+
+  transition: background-color 0.2s ease;
+}
+
+.secondary {
+  background-color: hsl(340, 60%, 40%);
+
+  color: #efefef;
+
+  transition: background-color 0.2s ease;
+}
+.secondary:hover {
+  background-color: hsl(340, 80%, 40%);
+
+  transition: background-color 0.2s ease;
+}
+.secondary:active {
+  background-color: hsl(340, 100%, 40%);
+
+  transition: background-color 0.2s ease;
+}
+
+.neutral {
+  background-color: hsl(0, 0%, 12%);
+
+  color: #efefef;
+
+  transition: background-color 0.2s ease;
+}
+.neutral:hover {
+  background-color: hsl(0, 0%, 20%);
+
+  transition: background-color 0.2s ease;
+}
+.neutral:active {
+  background-color: hsl(0, 0%, 30%);
 
   transition: background-color 0.2s ease;
 }
