@@ -42,8 +42,8 @@ export default function FavoritesPage() {
         <section className={styles.folder} style={{ marginTop: "6rem" }}>
           <header className={styles.folderHeader}>
             <h2 clasname={styles.folderTitle}>All</h2>
-            <ButtonLink href="/edit" variant="neutral">
-              Edit link
+            <ButtonLink href="/edit/all" variant="neutral">
+              Edit
             </ButtonLink>
           </header>
 
