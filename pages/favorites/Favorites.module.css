@@ -12,6 +12,7 @@
 .header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .header > h1 {
   margin: 0;
@@ -47,6 +48,7 @@
 .folderHeader {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .folderHeader > button {
   max-height: 2rem;
