@@ -21,7 +21,11 @@ export default async function handler(req, res) {
 
       res.status(200).json(channelData);
     } catch (error) {
-      res.status(404).json({ code: error.message });
+      if (error.message === "invalid_id") {
+        res.status(404).json({ code: error.message });
+      } else {
+        res.status(400).json({ code: "unknown" });
+      }
     }
   }
 }
