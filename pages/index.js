@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import useForm from "../hooks/useForm";
 import * as yup from "yup";
-import axios from "axios";
 import { useState } from "react";
 
 import styles from "../styles/Home.module.css";
@@ -11,6 +10,7 @@ import { Form } from "../components/Form/Form";
 import { TextField } from "../components/TextField/TextField";
 import { Button } from "../components/Button/Button";
 import { Alert } from "../components/Alert/Alert";
+import { useFavorites } from "../contexts/favorites-context";
 
 const formFields = {
   url: {
@@ -32,34 +32,22 @@ export default function Home() {
   const router = useRouter();
   const { subscribe, onSubmit, values } = useForm(yup);
   const [showAlert, setShowAlert] = useState({ message: "" });
+  const { addFavorite } = useFavorites();
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const channelId = getChannelId(values.url);
 
     try {
-      const { data } = await axios.get("/api/favorites", {
-        params: { channelId: channelId },
-      });
-
+      await addFavorite(values.url);
       router.push({
         pathname: "/favorites",
-        query: { channelId: channelId },
       });
     } catch (error) {
       const errorCode = error.response.data?.code;
-
       setShowAlert({
         message: errorMessages[errorCode] || errorMessages["unknown"],
       });
     }
-  }
-
-  function getChannelId(url) {
-    if (!url) return;
-    const [channelId] = url.split("/").slice(-1);
-
-    return channelId;
   }
 
   return (

@@ -1,33 +1,13 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import axios from "axios";
 
 import styles from "./Favorites.module.css";
 import { ButtonLink } from "../../components/ButtonLink/ButtonLink.jsx";
+import { useFavorites } from "../../contexts/favorites-context";
 
 export default function FavoritesPage() {
-  const router = useRouter();
-  const [channels, setChannels] = useState([]);
-
-  useEffect(() => {
-    const channelId = router.query?.channelId;
-    if (!channelId) return;
-
-    router.replace(router.pathname);
-
-    axios
-      .get("/api/favorites", {
-        params: { channelId: channelId },
-      })
-      .then(({ data }) => setChannels([data]));
-  }, [router]);
-
-  useEffect(() => {
-    console.log(channels);
-  }, [channels]);
+  const { favorites } = useFavorites();
 
   return (
     <div className={styles.page}>
@@ -68,7 +48,7 @@ export default function FavoritesPage() {
           </header>
 
           <ul className={styles.channelList}>
-            {channels.map((channel) => (
+            {favorites?.map((channel) => (
               <li key={channel.id} className={styles.channel}>
                 <Link href={channel.url} passHref>
                   <div>
