@@ -5,12 +5,13 @@ export function TextField({
   name,
   errors = [],
   children,
+  style,
   ...rest
 }) {
   const hasError = errors.length > 0;
 
   return (
-    <div className={styles.field}>
+    <div className={styles.field} style={style}>
       <label htmlFor={name}>{label}</label>
       <input name={name} id={name} type="text" {...rest} />
 
