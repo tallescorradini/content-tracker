@@ -47,7 +47,7 @@ export default function FavoritesPage() {
           >
             <header className={styles.folderHeader}>
               <h2 clasname={styles.folderTitle}>{folder.name}</h2>
-              <ButtonLink href="/edit/all" variant="neutral">
+              <ButtonLink href={`/edit/${folder.slug}`} variant="neutral">
                 Edit
               </ButtonLink>
             </header>

@@ -9,8 +9,20 @@ export function useFavorites() {
 
 const DEFAULT_FOLDER_NAME = "Uncategorized";
 
+function slugify(folderName) {
+  return folderName
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\-]+/g, "")
+    .replace(/\-\-+/g, "-")
+    .replace(/^-+/, "")
+    .replace(/-+$/, "");
+  //
+}
+
 export function FavoritesProvider({ children }) {
-  const [favorites, setFavorites] = useState([]);
   const [folders, setFolders] = useState([]);
 
   function _getChannelId(url) {
@@ -48,11 +60,21 @@ export function FavoritesProvider({ children }) {
     if (folders.length > 0) {
       // setFolders(loadedFolders)
     } else {
-      setFolders([{ name: DEFAULT_FOLDER_NAME, channels: [] }]);
+      setFolders([
+        {
+          name: DEFAULT_FOLDER_NAME,
+          slug: slugify(DEFAULT_FOLDER_NAME),
+          channels: [],
+        },
+      ]);
     }
   }, [folders]);
 
-  const value = { addFavorite, folders };
+  function getFolderBySlug(slug) {
+    return folders.filter((folder) => folder.slug === slug)[0];
+  }
+
+  const value = { addFavorite, folders, getFolderBySlug };
   return (
     <FavoritesContext.Provider value={value}>
       {children}

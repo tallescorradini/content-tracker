@@ -6,7 +6,7 @@ import styles from "./EditFolder.module.css";
 import { TextField } from "../../../components/TextField/TextField";
 import { Button } from "../../../components/Button/Button";
 import useForm from "../../../hooks/useForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFavorites } from "../../../contexts/favorites-context";
 
 const formFields = {
@@ -26,8 +26,9 @@ const formFields = {
 
 export default function Folder() {
   const router = useRouter();
-  const { favorites } = useFavorites();
+  const { getFolderBySlug } = useFavorites();
   const { subscribe, onSubmit, values } = useForm(yup);
+  const [folder, setFolder] = useState();
   const [onEditName, setOnEditName] = useState(false);
   const [activeListItem, setActiveListItem] = useState(null);
 
@@ -44,6 +45,16 @@ export default function Folder() {
     // resetFormValue
     setOnEditName(false);
   }
+
+  useEffect(() => {
+    const slug = router.query.folder;
+    if (!slug) return;
+    const folder = getFolderBySlug(slug);
+
+    setFolder(folder);
+  }, [router, getFolderBySlug]);
+
+  if (folder) formFields.folderName.initialValue = folder.name;
 
   return (
     <main className={styles.page}>
@@ -82,7 +93,7 @@ export default function Folder() {
             <Button variant="primary">Add</Button>
           </header>
           <ul className={styles.channelsList}>
-            {favorites.map((channel) => (
+            {folder?.channels.map((channel) => (
               <li
                 onMouseEnter={(e) => {
                   console.log(e["_targetInst"].key);
