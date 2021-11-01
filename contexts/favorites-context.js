@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 const FavoritesContext = React.createContext();
@@ -9,6 +9,7 @@ export function useFavorites() {
 
 export function FavoritesProvider({ children }) {
   const [favorites, setFavorites] = useState([]);
+  const [folders, setFolders] = useState([]);
 
   function _getChannelId(url) {
     if (!url) return;
@@ -17,17 +18,39 @@ export function FavoritesProvider({ children }) {
     return channelId;
   }
 
-  async function addFavorite(url) {
+  async function addFavorite(url, folderName = "All") {
     const channelId = _getChannelId(url);
 
-    const { data } = await axios.get("/api/favorites", {
+    const { data: channelData } = await axios.get("/api/favorites", {
       params: { channelId: channelId },
     });
 
-    setFavorites((prev) => [...prev, data]);
+    setFolders((prevfolders) =>
+      prevfolders.map((prevFolder) => {
+        if (prevFolder.name === folderName) {
+          const isIncluded = prevFolder.channels.reduce(
+            (result, current) => current.id === channelData.id || result,
+            false
+          );
+
+          if (!isIncluded)
+            prevFolder.channels = [...prevFolder.channels, channelData];
+        }
+        return prevFolder;
+      })
+    );
   }
 
-  const value = { addFavorite, favorites };
+  useEffect(() => {
+    // load user folders
+    if (folders.length > 0) {
+      // setFolders(loadedFolders)
+    } else {
+      setFolders([{ name: "All", channels: [] }]);
+    }
+  }, [folders]);
+
+  const value = { addFavorite, folders };
   return (
     <FavoritesContext.Provider value={value}>
       {children}

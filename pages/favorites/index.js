@@ -7,7 +7,7 @@ import { ButtonLink } from "../../components/ButtonLink/ButtonLink.jsx";
 import { useFavorites } from "../../contexts/favorites-context";
 
 export default function FavoritesPage() {
-  const { favorites } = useFavorites();
+  const { folders } = useFavorites();
 
   return (
     <div className={styles.page}>
@@ -39,37 +39,43 @@ export default function FavoritesPage() {
           </ButtonLink>
         </section>
 
-        <section className={styles.folder} style={{ marginTop: "6rem" }}>
-          <header className={styles.folderHeader}>
-            <h2 clasname={styles.folderTitle}>All</h2>
-            <ButtonLink href="/edit/all" variant="neutral">
-              Edit
-            </ButtonLink>
-          </header>
+        {folders.map((folder) => (
+          <section
+            key={folder.name}
+            className={styles.folder}
+            style={{ marginTop: "6rem" }}
+          >
+            <header className={styles.folderHeader}>
+              <h2 clasname={styles.folderTitle}>{folder.name}</h2>
+              <ButtonLink href="/edit/all" variant="neutral">
+                Edit
+              </ButtonLink>
+            </header>
 
-          <ul className={styles.channelList}>
-            {favorites?.map((channel) => (
-              <li key={channel.id} className={styles.channel}>
-                <Link href={channel.url} passHref>
-                  <div>
-                    <Image
-                      src={channel.thumbnail.url}
-                      alt="Channel thumbnail"
-                      width={channel.thumbnail.width}
-                      height={channel.thumbnail.height}
-                    />
-                    <p
-                      className={styles.channelName}
-                      style={{ marginTop: "0.5rem" }}
-                    >
-                      {channel.title}
-                    </p>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
+            <ul className={styles.channelList}>
+              {folder.channels?.map((channel) => (
+                <li key={channel.id} className={styles.channel}>
+                  <Link href={channel.url} passHref>
+                    <div>
+                      <Image
+                        src={channel.thumbnail.url}
+                        alt="Channel thumbnail"
+                        width={channel.thumbnail.width}
+                        height={channel.thumbnail.height}
+                      />
+                      <p
+                        className={styles.channelName}
+                        style={{ marginTop: "0.5rem" }}
+                      >
+                        {channel.title}
+                      </p>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
       </main>
     </div>
   );
