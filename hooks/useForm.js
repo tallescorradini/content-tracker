@@ -13,6 +13,21 @@ const useForm = (yup) => {
   let schema;
   let initialValues;
 
+  function resetField(fieldName) {
+    if (Object.keys(values).includes(fieldName))
+      setValues((prev) => ({ ...prev, [fieldName]: initialValues[fieldName] }));
+
+    if (Object.keys(errors).includes(fieldName)) {
+      const { [fieldName]: field, ...rest } = errors;
+      setErrors(rest);
+    }
+
+    if (Object.keys(changed).includes(fieldName)) {
+      const { [fieldName]: field, ...rest } = changed;
+      setChanged(rest);
+    }
+  }
+
   const _getValidationErrors = async ({ schema, values }) => {
     let validationErrors = [];
     try {
@@ -121,6 +136,7 @@ const useForm = (yup) => {
     values,
     changed,
     errors,
+    resetField,
   };
 };
 

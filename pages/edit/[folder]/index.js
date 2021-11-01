@@ -27,9 +27,8 @@ const formFields = {
 export default function Folder() {
   const router = useRouter();
   const { getFolderBySlug } = useFavorites();
-  const { subscribe, onSubmit, values, changed } = useForm(yup);
+  const { subscribe, onSubmit, values, changed, resetField } = useForm(yup);
   const [folder, setFolder] = useState();
-  const [onEditName, setOnEditName] = useState(false);
   const [activeListItem, setActiveListItem] = useState(null);
 
   function handleReturn() {
@@ -42,8 +41,7 @@ export default function Folder() {
   }
 
   function handleDiscard() {
-    // resetFormValue
-    setOnEditName(false);
+    resetField(formFields.folderName.attribute.name);
   }
 
   useEffect(() => {
