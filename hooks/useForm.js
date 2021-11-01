@@ -7,7 +7,9 @@ import { useState } from "react";
 
 const useForm = (yup) => {
   const [values, setValues] = useState({});
+  const [changed, setChanged] = useState({});
   const [errors, setErrors] = useState({});
+
   let schema;
   let initialValues;
 
@@ -53,6 +55,10 @@ const useForm = (yup) => {
     if (fieldHasErrors) _validateField(fieldName, fieldValue);
 
     setValues((prev) => ({ ...prev, [fieldName]: fieldValue }));
+    setChanged((prev) => ({
+      ...prev,
+      [fieldName]: fieldValue !== initialValues[fieldName],
+    }));
   };
 
   const _validateField = async (fieldName, fieldValue) => {
@@ -87,6 +93,8 @@ const useForm = (yup) => {
       e.preventDefault();
       const validForm = await _validateForm();
       if (!validForm) return;
+
+      setChanged({});
       handleSubmit(e);
     },
   });
@@ -100,7 +108,7 @@ const useForm = (yup) => {
       name: fieldName,
       label: field.attribute.label,
       type: field.attribute.type,
-      value: values[fieldName] || initialValues[fieldName],
+      value: changed[fieldName] ? values[fieldName] : initialValues[fieldName],
       onChange: _handleInputChange,
       errors: errors[fieldName],
       onBlur: _handleInputBlur,
@@ -111,6 +119,7 @@ const useForm = (yup) => {
     subscribe,
     onSubmit,
     values,
+    changed,
     errors,
   };
 };

@@ -27,7 +27,7 @@ const formFields = {
 export default function Folder() {
   const router = useRouter();
   const { getFolderBySlug } = useFavorites();
-  const { subscribe, onSubmit, values } = useForm(yup);
+  const { subscribe, onSubmit, values, changed } = useForm(yup);
   const [folder, setFolder] = useState();
   const [onEditName, setOnEditName] = useState(false);
   const [activeListItem, setActiveListItem] = useState(null);
