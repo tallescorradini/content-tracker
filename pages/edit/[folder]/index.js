@@ -72,7 +72,7 @@ export default function Folder() {
             {...subscribe(formFields.folderName)}
             style={{ marginBottom: "1rem" }}
           />
-          {onEditName ? (
+          {changed?.[formFields.folderName.attribute.name] ? (
             <div role="group" className={styles.buttonGroup}>
               <Button type="submit" variant="primary">
                 Save
