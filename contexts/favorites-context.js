@@ -74,7 +74,19 @@ export function FavoritesProvider({ children }) {
     return folders.filter((folder) => folder.slug === slug)[0];
   }
 
-  const value = { addFavorite, folders, getFolderBySlug };
+  function updateFolderName({ oldName, newName }) {
+    setFolders((prevfolders) =>
+      prevfolders.map((prevFolder) => {
+        if (prevFolder.name === oldName) {
+          return { ...prevFolder, name: newName, slug: slugify(newName) };
+        }
+        return prevFolder;
+      })
+    );
+    return { updatedSlug: slugify(newName) };
+  }
+
+  const value = { addFavorite, folders, getFolderBySlug, updateFolderName };
   return (
     <FavoritesContext.Provider value={value}>
       {children}

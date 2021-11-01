@@ -26,7 +26,7 @@ const formFields = {
 
 export default function Folder() {
   const router = useRouter();
-  const { getFolderBySlug } = useFavorites();
+  const { getFolderBySlug, updateFolderName } = useFavorites();
   const { subscribe, onSubmit, values, changed, resetField } = useForm(yup);
   const [folder, setFolder] = useState();
   const [activeListItem, setActiveListItem] = useState(null);
@@ -36,8 +36,11 @@ export default function Folder() {
   }
 
   function handleSubmit() {
-    //
-    console.log("submitted");
+    const { updatedSlug } = updateFolderName({
+      oldName: formFields.folderName.initialValue,
+      newName: values[formFields.folderName.attribute.name],
+    });
+    router.replace(`/edit/${updatedSlug}`);
   }
 
   function handleDiscard() {
@@ -46,6 +49,7 @@ export default function Folder() {
 
   useEffect(() => {
     const slug = router.query.folder;
+
     if (!slug) return;
     const folder = getFolderBySlug(slug);
 
