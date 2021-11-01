@@ -38,7 +38,7 @@ export default function Home() {
     e.preventDefault();
 
     try {
-      await addFavorite(values.url, "All");
+      await addFavorite(values.url);
       router.push({
         pathname: "/favorites",
       });

@@ -7,6 +7,8 @@ export function useFavorites() {
   return useContext(FavoritesContext);
 }
 
+const DEFAULT_FOLDER_NAME = "Uncategorized";
+
 export function FavoritesProvider({ children }) {
   const [favorites, setFavorites] = useState([]);
   const [folders, setFolders] = useState([]);
@@ -18,7 +20,7 @@ export function FavoritesProvider({ children }) {
     return channelId;
   }
 
-  async function addFavorite(url, folderName = "All") {
+  async function addFavorite(url, folderName = DEFAULT_FOLDER_NAME) {
     const channelId = _getChannelId(url);
 
     const { data: channelData } = await axios.get("/api/favorites", {
@@ -46,7 +48,7 @@ export function FavoritesProvider({ children }) {
     if (folders.length > 0) {
       // setFolders(loadedFolders)
     } else {
-      setFolders([{ name: "All", channels: [] }]);
+      setFolders([{ name: DEFAULT_FOLDER_NAME, channels: [] }]);
     }
   }, [folders]);
 
