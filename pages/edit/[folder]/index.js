@@ -76,11 +76,11 @@ export default function Folder() {
           />
           {changed?.[formFields.folderName.attribute.name] ? (
             <div role="group" className={styles.buttonGroup}>
-              <Button type="submit" variant="primary">
-                Save
-              </Button>
               <Button onClick={handleDiscard} variant="secondary">
                 Discard
+              </Button>
+              <Button type="submit" variant="primary">
+                Save
               </Button>
             </div>
           ) : null}
