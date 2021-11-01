@@ -20,8 +20,10 @@ const formFields = {
     initialValue: "",
     validation: yup
       .string()
+      .ensure()
+      .trim()
       .required("Campo obrigatório")
-      .min(6, "Deve conter ao menos 6 caracteres"),
+      .matches(/^[\w ]+$/g, "Deve conter somente letras e números"),
   },
 };
 
