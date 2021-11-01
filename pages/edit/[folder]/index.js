@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import Head from "next/head";
 import Image from "next/image";
 import * as yup from "yup";
 
@@ -59,70 +60,77 @@ export default function Folder() {
   if (folder) formFields.folderName.initialValue = folder.name;
 
   return (
-    <main className={styles.page}>
-      <section className={styles.container}>
-        <header
-          className={styles.containerHeader}
-          style={{ marginBottom: "3rem" }}
-        >
-          <Button variant="neutral" onClick={handleReturn}>{`<`}</Button>
-          <h1 className={styles.title}>Edit folder</h1>
-        </header>
-
-        <form {...onSubmit(handleSubmit)} style={{ marginBottom: "4rem" }}>
-          <TextField
-            {...subscribe(formFields.folderName)}
-            style={{ marginBottom: "1rem" }}
-          />
-          {changed?.[formFields.folderName.attribute.name] ? (
-            <div role="group" className={styles.buttonGroup}>
-              <Button onClick={handleDiscard} variant="secondary">
-                Discard
-              </Button>
-              <Button type="submit" variant="primary">
-                Save
-              </Button>
-            </div>
-          ) : null}
-        </form>
-
-        <section>
+    <div>
+      <Head>
+        <title>{`Edit Folder`}</title>
+        <meta name="description" content="Page for editing folder details" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <main className={styles.page}>
+        <section className={styles.container}>
           <header
-            className={styles.channelsHeader}
-            style={{ marginBottom: "2rem" }}
+            className={styles.containerHeader}
+            style={{ marginBottom: "3rem" }}
           >
-            <h2 className={styles.channelsTitle}>Channels</h2>
-            <Button variant="primary">Add</Button>
+            <Button variant="neutral" onClick={handleReturn}>{`<`}</Button>
+            <h1 className={styles.title}>Edit Folder</h1>
           </header>
-          <ul className={styles.channelsList}>
-            {folder?.channels.map((channel) => (
-              <li
-                onMouseEnter={(e) => {
-                  console.log(e["_targetInst"].key);
-                  setActiveListItem(e["_targetInst"].key);
-                }}
-                onMouseLeave={() => setActiveListItem(null)}
-                key={channel.id}
-                style={{ marginBottom: "1rem" }}
-              >
-                <div className={styles.channel}>
-                  <Image
-                    src={channel.thumbnail.url}
-                    alt="Channel thumbnail"
-                    width={24}
-                    height={24}
-                  />
-                  <span>{channel.title}</span>
-                </div>
 
-                {channel.id === activeListItem ? (
-                  <Button variant="secondary">Remove</Button>
-                ) : null}
-              </li>
-            ))}
-          </ul>
+          <form {...onSubmit(handleSubmit)} style={{ marginBottom: "4rem" }}>
+            <TextField
+              {...subscribe(formFields.folderName)}
+              style={{ marginBottom: "1rem" }}
+            />
+            {changed?.[formFields.folderName.attribute.name] ? (
+              <div role="group" className={styles.buttonGroup}>
+                <Button onClick={handleDiscard} variant="secondary">
+                  Discard
+                </Button>
+                <Button type="submit" variant="primary">
+                  Save
+                </Button>
+              </div>
+            ) : null}
+          </form>
+
+          <section>
+            <header
+              className={styles.channelsHeader}
+              style={{ marginBottom: "2rem" }}
+            >
+              <h2 className={styles.channelsTitle}>Channels</h2>
+              <Button variant="primary">Add</Button>
+            </header>
+            <ul className={styles.channelsList}>
+              {folder?.channels.map((channel) => (
+                <li
+                  onMouseEnter={(e) => {
+                    console.log(e["_targetInst"].key);
+                    setActiveListItem(e["_targetInst"].key);
+                  }}
+                  onMouseLeave={() => setActiveListItem(null)}
+                  key={channel.id}
+                  style={{ marginBottom: "1rem" }}
+                >
+                  <div className={styles.channel}>
+                    <Image
+                      src={channel.thumbnail.url}
+                      alt="Channel thumbnail"
+                      width={24}
+                      height={24}
+                    />
+                    <span>{channel.title}</span>
+                  </div>
+
+                  {channel.id === activeListItem ? (
+                    <Button variant="secondary">Remove</Button>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </section>
         </section>
-      </section>
-    </main>
+      </main>
+    </div>
   );
 }
