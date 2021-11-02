@@ -107,7 +107,6 @@ export default function Folder() {
               {folder?.channels.map((channel) => (
                 <li
                   onMouseEnter={(e) => {
-                    console.log(e["_targetInst"].key);
                     setActiveListItem(e["_targetInst"].key);
                   }}
                   onMouseLeave={() => setActiveListItem(null)}
