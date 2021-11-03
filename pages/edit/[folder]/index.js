@@ -9,6 +9,7 @@ import { Button } from "../../../components/Button/Button";
 import useForm from "../../../hooks/useForm";
 import { useEffect, useState } from "react";
 import { useFavorites } from "../../../contexts/favorites-context";
+import { ButtonLink } from "../../../components/ButtonLink/ButtonLink.jsx";
 
 const formFields = {
   folderName: {
@@ -101,7 +102,12 @@ export default function Folder() {
               style={{ marginBottom: "2rem" }}
             >
               <h2 className={styles.channelsTitle}>Channels</h2>
-              <Button variant="primary">Add</Button>
+              <ButtonLink
+                href={`/edit/${router.query.folder}/add`}
+                variant="primary"
+              >
+                Add
+              </ButtonLink>
             </header>
             <ul className={styles.channelsList}>
               {folder?.channels.map((channel) => (

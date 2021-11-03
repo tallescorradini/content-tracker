@@ -20,7 +20,7 @@ export default function FavoritesPage() {
       <header className={styles.header}>
         <h1>My Favorites</h1>
         <ButtonLink href="/new" variant="primary">
-          Add Folder
+          Add
         </ButtonLink>
       </header>
 
