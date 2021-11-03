@@ -6,7 +6,7 @@ import { ButtonLink } from "../../components/ButtonLink/ButtonLink.jsx";
 import { useFavorites } from "../../contexts/favorites-context";
 
 export default function FavoritesPage() {
-  const { folders } = useFavorites();
+  const { folders, onAccessChannel, notifications } = useFavorites();
 
   return (
     <div className={styles.page}>
@@ -52,12 +52,17 @@ export default function FavoritesPage() {
             </header>
 
             <ul className={styles.channelList}>
-              {folder.channels.length < 1 ? (
+              {folder.channels?.length < 1 ? (
                 <li className={styles.channel}>List is empty</li>
               ) : (
                 folder.channels?.map((channel) => (
                   <li key={channel.id} className={styles.channel}>
-                    <a href={channel.url} target="_blank" rel="noreferrer">
+                    <a
+                      onClick={() => onAccessChannel(channel.id)}
+                      href={channel.url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       <div>
                         <Image
                           src={channel.thumbnail.url}
@@ -65,7 +70,7 @@ export default function FavoritesPage() {
                           width={channel.thumbnail.width}
                           height={channel.thumbnail.height}
                         />
-                        {channel.notification ? (
+                        {notifications[channel.id] ? (
                           <span className={styles.badge}></span>
                         ) : null}
                         <p

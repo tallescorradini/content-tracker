@@ -24,6 +24,7 @@ function slugify(folderName) {
 
 export function FavoritesProvider({ children }) {
   const [folders, setFolders] = useState([]);
+  const [notifications, setNotifications] = useState({});
 
   function _getChannelId(url) {
     if (!url) return;
@@ -35,30 +36,47 @@ export function FavoritesProvider({ children }) {
   async function addFavorite(url, folderName = DEFAULT_FOLDER_NAME) {
     const channelId = _getChannelId(url);
 
-    const { data: channelData } = await axios.get("/api/favorites", {
+    const { data } = await axios.get("/api/favorites", {
       params: { channelId: channelId },
     });
 
-    setFolders((prevfolders) =>
-      prevfolders.map((prevFolder) => {
-        if (prevFolder.name === folderName) {
-          const isIncluded = prevFolder.channels.reduce(
-            (result, current) => current.id === channelData.id || result,
-            false
-          );
+    const channelData = { ...data, lastAccess: new Date().toISOString() };
 
-          if (!isIncluded)
-            prevFolder.channels = [...prevFolder.channels, channelData];
-        }
-        return prevFolder;
+    setFolders((prevfolders) =>
+      prevfolders.map((folder) => {
+        if (folder.name !== folderName) return folder;
+
+        const isIncluded = folder.channels.reduce(
+          (result, current) => current.id === channelData.id || result,
+          false
+        );
+
+        if (isIncluded) return folder;
+        return { ...folder, channels: [...folder.channels, channelData] };
       })
     );
+  }
+
+  function _getNotifications() {
+    folders.forEach((folder) => {
+      folder.channels.forEach(async (channel) => {
+        const { data } = await axios.get(`/api/${channel.id}`, {
+          params: { publishedAfter: channel.lastAccess },
+        });
+
+        setNotifications((prev) => ({
+          ...prev,
+          [channel.id]: data.hasNotifications,
+        }));
+      });
+    });
   }
 
   useEffect(() => {
     // load user folders
     if (folders.length > 0) {
       // setFolders(loadedFolders)
+      if (Object.keys(notifications).length < 1) _getNotifications();
     } else {
       setFolders([
         {
@@ -104,12 +122,35 @@ export function FavoritesProvider({ children }) {
     );
   }
 
+  function _updateLastAccess(channelId) {
+    setFolders((prevFolders) =>
+      prevFolders.map((folder) => ({
+        ...folder,
+        channels: folder.channels.map((channel) => {
+          if (channel.id !== channelId) return channel;
+          return { ...channel, lastAccess: new Date().toISOString() };
+        }),
+      }))
+    );
+  }
+
+  function _updateChannelNotification(channelId) {
+    setNotifications((prev) => ({ ...prev, [channelId]: false }));
+  }
+
+  function onAccessChannel(channelId) {
+    _updateLastAccess(channelId);
+    _updateChannelNotification(channelId);
+  }
+
   const value = {
     addFavorite,
     removeFavorite,
     folders,
     getFolderBySlug,
     updateFolderName,
+    onAccessChannel,
+    notifications,
   };
   return (
     <FavoritesContext.Provider value={value}>
