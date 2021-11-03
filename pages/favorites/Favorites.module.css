@@ -84,3 +84,15 @@
 
   text-align: center;
 }
+
+.badge {
+  position: absolute;
+
+  margin-top: -0.5rem;
+  margin-left: -0.5rem;
+
+  height: 1rem;
+  width: 1rem;
+  background-color: hsl(340, 100%, 40%);
+  border-radius: 50%;
+}

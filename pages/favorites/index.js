@@ -66,6 +66,9 @@ export default function FavoritesPage() {
                           width={channel.thumbnail.width}
                           height={channel.thumbnail.height}
                         />
+                        {channel.notification ? (
+                          <span className={styles.badge}></span>
+                        ) : null}
                         <p
                           className={styles.channelName}
                           style={{ marginTop: "0.5rem" }}
