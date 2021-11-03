@@ -1,6 +1,5 @@
 import Head from "next/head";
 import Image from "next/image";
-import Link from "next/link";
 
 import styles from "./Favorites.module.css";
 import { ButtonLink } from "../../components/ButtonLink/ButtonLink.jsx";
@@ -58,7 +57,7 @@ export default function FavoritesPage() {
               ) : (
                 folder.channels?.map((channel) => (
                   <li key={channel.id} className={styles.channel}>
-                    <Link href={channel.url} passHref>
+                    <a href={channel.url} target="_blank" rel="noreferrer">
                       <div>
                         <Image
                           src={channel.thumbnail.url}
@@ -76,7 +75,7 @@ export default function FavoritesPage() {
                           {channel.title}
                         </p>
                       </div>
-                    </Link>
+                    </a>
                   </li>
                 ))
               )}
