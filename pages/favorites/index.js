@@ -53,26 +53,30 @@ export default function FavoritesPage() {
             </header>
 
             <ul className={styles.channelList}>
-              {folder.channels?.map((channel) => (
-                <li key={channel.id} className={styles.channel}>
-                  <Link href={channel.url} passHref>
-                    <div>
-                      <Image
-                        src={channel.thumbnail.url}
-                        alt="Channel thumbnail"
-                        width={channel.thumbnail.width}
-                        height={channel.thumbnail.height}
-                      />
-                      <p
-                        className={styles.channelName}
-                        style={{ marginTop: "0.5rem" }}
-                      >
-                        {channel.title}
-                      </p>
-                    </div>
-                  </Link>
-                </li>
-              ))}
+              {folder.channels.length < 1 ? (
+                <li className={styles.channel}>List is empty</li>
+              ) : (
+                folder.channels?.map((channel) => (
+                  <li key={channel.id} className={styles.channel}>
+                    <Link href={channel.url} passHref>
+                      <div>
+                        <Image
+                          src={channel.thumbnail.url}
+                          alt="Channel thumbnail"
+                          width={channel.thumbnail.width}
+                          height={channel.thumbnail.height}
+                        />
+                        <p
+                          className={styles.channelName}
+                          style={{ marginTop: "0.5rem" }}
+                        >
+                          {channel.title}
+                        </p>
+                      </div>
+                    </Link>
+                  </li>
+                ))
+              )}
             </ul>
           </section>
         ))}
