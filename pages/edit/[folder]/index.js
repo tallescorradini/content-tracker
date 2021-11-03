@@ -30,7 +30,7 @@ const formFields = {
 
 export default function Folder() {
   const router = useRouter();
-  const { getFolderBySlug, updateFolderName } = useFavorites();
+  const { getFolderBySlug, updateFolderName, removeFavorite } = useFavorites();
   const { subscribe, onSubmit, values, changed, resetField } = useForm(yup);
   const [folder, setFolder] = useState();
   const [activeListItem, setActiveListItem] = useState(null);
@@ -49,6 +49,10 @@ export default function Folder() {
 
   function handleDiscard() {
     resetField(formFields.folderName.attribute.name);
+  }
+
+  function handleRemoveChannel(channelId) {
+    removeFavorite(channelId, folder.name);
   }
 
   useEffect(() => {
@@ -130,7 +134,12 @@ export default function Folder() {
                   </div>
 
                   {channel.id === activeListItem ? (
-                    <Button variant="secondary">Remove</Button>
+                    <Button
+                      onClick={() => handleRemoveChannel(channel.id)}
+                      variant="secondary"
+                    >
+                      Remove
+                    </Button>
                   ) : null}
                 </li>
               ))}

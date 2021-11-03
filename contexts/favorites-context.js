@@ -86,7 +86,31 @@ export function FavoritesProvider({ children }) {
     return { updatedSlug: slugify(newName) };
   }
 
-  const value = { addFavorite, folders, getFolderBySlug, updateFolderName };
+  async function removeFavorite(channelId, folderName = DEFAULT_FOLDER_NAME) {
+    if (!channelId) return;
+
+    setFolders((prevfolders) =>
+      prevfolders.map((prevFolder) => {
+        if (prevFolder.name === folderName) {
+          return {
+            ...prevFolder,
+            channels: prevFolder.channels.filter(
+              (channel) => channel.id !== channelId
+            ),
+          };
+        }
+        return prevFolder;
+      })
+    );
+  }
+
+  const value = {
+    addFavorite,
+    removeFavorite,
+    folders,
+    getFolderBySlug,
+    updateFolderName,
+  };
   return (
     <FavoritesContext.Provider value={value}>
       {children}
