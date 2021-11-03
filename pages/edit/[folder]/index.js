@@ -114,35 +114,39 @@ export default function Folder() {
               </ButtonLink>
             </header>
             <ul className={styles.channelsList}>
-              {folder?.channels.map((channel) => (
-                <li
-                  onMouseEnter={(e) => {
-                    setActiveListItem(e["_targetInst"].key);
-                  }}
-                  onMouseLeave={() => setActiveListItem(null)}
-                  key={channel.id}
-                  style={{ marginBottom: "1rem" }}
-                >
-                  <div className={styles.channel}>
-                    <Image
-                      src={channel.thumbnail.url}
-                      alt="Channel thumbnail"
-                      width={24}
-                      height={24}
-                    />
-                    <span>{channel.title}</span>
-                  </div>
+              {folder?.channels.length < 1 ? (
+                <p>List is empty</p>
+              ) : (
+                folder?.channels.map((channel) => (
+                  <li
+                    onMouseEnter={(e) => {
+                      setActiveListItem(e["_targetInst"].key);
+                    }}
+                    onMouseLeave={() => setActiveListItem(null)}
+                    key={channel.id}
+                    style={{ marginBottom: "1rem" }}
+                  >
+                    <div className={styles.channel}>
+                      <Image
+                        src={channel.thumbnail.url}
+                        alt="Channel thumbnail"
+                        width={24}
+                        height={24}
+                      />
+                      <span>{channel.title}</span>
+                    </div>
 
-                  {channel.id === activeListItem ? (
-                    <Button
-                      onClick={() => handleRemoveChannel(channel.id)}
-                      variant="secondary"
-                    >
-                      Remove
-                    </Button>
-                  ) : null}
-                </li>
-              ))}
+                    {channel.id === activeListItem ? (
+                      <Button
+                        onClick={() => handleRemoveChannel(channel.id)}
+                        variant="secondary"
+                      >
+                        Remove
+                      </Button>
+                    ) : null}
+                  </li>
+                ))
+              )}
             </ul>
           </section>
         </section>
