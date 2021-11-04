@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 
+import { firebase } from "../services/firebase";
+import { makeFolders } from "./interfaces/folders";
+
 const FavoritesContext = React.createContext();
 
 export function useFavorites() {
@@ -59,7 +62,7 @@ export function FavoritesProvider({ children }) {
 
   function _getNotifications() {
     folders.forEach((folder) => {
-      folder.channels.forEach(async (channel) => {
+      folder.channels?.forEach(async (channel) => {
         const { data } = await axios.get(`/api/${channel.id}`, {
           params: { publishedAfter: channel.lastAccess },
         });
@@ -77,7 +80,7 @@ export function FavoritesProvider({ children }) {
       // setFolders(loadedFolders)
       if (Object.keys(notifications).length < 1) _getNotifications();
 
-      localStorage.setItem("my-folders", JSON.stringify(folders));
+      firebase.updateFoldersData("userId", folders);
     } else {
       setFolders([
         {
@@ -145,11 +148,9 @@ export function FavoritesProvider({ children }) {
   }
 
   useEffect(() => {
-    //
-    const data = localStorage.getItem("my-folders");
-    if (!data) return;
-
-    setFolders(JSON.parse(data));
+    firebase
+      .getFoldersData("userId")
+      .then(({ data }) => setFolders(makeFolders(data)));
   }, []);
 
   const value = {
