@@ -63,7 +63,6 @@ export function FavoritesProvider({ children }) {
         const { data } = await axios.get(`/api/${channel.id}`, {
           params: { publishedAfter: channel.lastAccess },
         });
-
         setNotifications((prev) => ({
           ...prev,
           [channel.id]: data.hasNotifications,
@@ -77,6 +76,8 @@ export function FavoritesProvider({ children }) {
     if (folders.length > 0) {
       // setFolders(loadedFolders)
       if (Object.keys(notifications).length < 1) _getNotifications();
+
+      localStorage.setItem("my-folders", JSON.stringify(folders));
     } else {
       setFolders([
         {
@@ -142,6 +143,14 @@ export function FavoritesProvider({ children }) {
     _updateLastAccess(channelId);
     _updateChannelNotification(channelId);
   }
+
+  useEffect(() => {
+    //
+    const data = localStorage.getItem("my-folders");
+    if (!data) return;
+
+    setFolders(JSON.parse(data));
+  }, []);
 
   const value = {
     addFavorite,
