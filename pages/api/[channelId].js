@@ -6,7 +6,18 @@ export default async function handler(req, res) {
 
   try {
     const { data } = await axios.get(
-      `https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&maxResults=3&order=date&publishedAfter=${publishedAfter}&key=${process.env.YOUTUBE_API_KEY}`
+      `https://youtube.googleapis.com/youtube/v3/activities`,
+      {
+        params: {
+          part: "snippet",
+          channelId: channelId,
+          maxResults: 1,
+          order: "date",
+          publishedAfter: publishedAfter,
+          fields: "pageInfo/totalResults",
+          key: process.env.YOUTUBE_API_KEY,
+        },
+      }
     );
 
     res.status(200).json({ hasNotifications: !!data.pageInfo.totalResults });
