@@ -90,6 +90,9 @@
   flex-direction: column;
   align-items: center;
 }
+.channelImage {
+  border-radius: 0.25rem;
+}
 
 .badge {
   position: absolute;
