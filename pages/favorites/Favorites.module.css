@@ -62,11 +62,11 @@
 .channelList {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 1.5rem;
 
   margin: 0;
 
-  padding: 0;
+  padding: 1.5rem;
   border-radius: 0.25rem;
   background-color: hsl(0, 0%, 12%);
 
