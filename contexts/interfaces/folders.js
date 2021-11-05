@@ -1,6 +1,4 @@
-function makeThumbnail(data) {
-  const thumbnail = data?.thumbnail || {};
-
+function makeThumbnail(thumbnail = []) {
   return {
     url: thumbnail.url,
     width: parseInt(thumbnail.width) || undefined,
@@ -8,9 +6,7 @@ function makeThumbnail(data) {
   };
 }
 
-function makeChannels(data) {
-  const channels = data?.channels || [];
-
+function makeChannels(channels = []) {
   return channels.map((channel) => ({
     id: channel.id,
     title: channel.title,
@@ -21,9 +17,7 @@ function makeChannels(data) {
   }));
 }
 
-export function makeFolders(data) {
-  const folders = data?.folders || [];
-
+export function makeFolders(folders = []) {
   return folders.map((folder) => ({
     name: folder.name,
     slug: folder.slug,

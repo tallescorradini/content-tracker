@@ -37,13 +37,14 @@ export default function AddChannel() {
   const router = useRouter();
   const { subscribe, onSubmit, values } = useForm(yup);
   const [showAlert, setShowAlert] = useState({ message: "" });
-  const { addFavorite } = useFavorites();
+  const { addFavorite, getFolderBySlug } = useFavorites();
 
   async function handleSubmit() {
+    const folderName = getFolderBySlug(router.query.folder);
     try {
-      await addFavorite(values.url);
+      await addFavorite(values.url, folderName.name);
       router.push({
-        pathname: `/edit/${router.query.folder}`,
+        pathname: `/edit/${folderName.slug}`,
       });
     } catch (error) {
       const errorCode = error.response.data?.code;

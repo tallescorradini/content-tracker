@@ -32,18 +32,18 @@ export default function Home() {
   const router = useRouter();
   const { subscribe, onSubmit, values } = useForm(yup);
   const [showAlert, setShowAlert] = useState({ message: "" });
-  const { addFavorite } = useFavorites();
+  const { addFavorite, addFolder } = useFavorites();
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     try {
-      await addFavorite(values.url);
+      await addFolder("Uncategorized", [values.url]);
       router.push({
         pathname: "/favorites",
       });
     } catch (error) {
-      const errorCode = error.response.data?.code;
+      const errorCode = error.response?.data?.code;
       setShowAlert({
         message: errorMessages[errorCode] || errorMessages["unknown"],
       });

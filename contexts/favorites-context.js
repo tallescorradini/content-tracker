@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 import { firebase } from "../services/firebase";
@@ -9,8 +9,6 @@ const FavoritesContext = React.createContext();
 export function useFavorites() {
   return useContext(FavoritesContext);
 }
-
-const DEFAULT_FOLDER_NAME = "Uncategorized";
 
 function slugify(folderName) {
   return folderName
@@ -36,7 +34,38 @@ export function FavoritesProvider({ children }) {
     return channelId;
   }
 
-  async function addFavorite(url, folderName = DEFAULT_FOLDER_NAME) {
+  function _removeDuplicates(array) {
+    return [...new Set(array)];
+  }
+
+  async function addFolder(folderName, channelUrls = []) {
+    const channelIds = _removeDuplicates(
+      channelUrls.map((channelUrl) => _getChannelId(channelUrl))
+    );
+
+    const channels = await Promise.all(
+      channelIds.map(async (channelId) => {
+        const { data } = await axios.get("/api/favorites", {
+          params: { channelId: channelId },
+        });
+        const channelData = {
+          ...data,
+          lastAccess: new Date().toISOString(),
+        };
+        return channelData;
+      })
+    );
+
+    const folder = {
+      name: folderName,
+      slug: slugify(folderName),
+      channels: channels,
+    };
+
+    setFolders((prevFolders) => [...prevFolders, folder]);
+  }
+
+  async function addFavorite(url, folderName) {
     const channelId = _getChannelId(url);
 
     const { data } = await axios.get("/api/favorites", {
@@ -60,7 +89,7 @@ export function FavoritesProvider({ children }) {
     );
   }
 
-  function _getNotifications() {
+  function _getNotifications(folders) {
     folders.forEach((folder) => {
       folder.channels?.forEach(async (channel) => {
         const { data } = await axios.get(`/api/${channel.id}`, {
@@ -73,24 +102,6 @@ export function FavoritesProvider({ children }) {
       });
     });
   }
-
-  useEffect(() => {
-    // load user folders
-    if (folders.length > 0) {
-      // setFolders(loadedFolders)
-      if (Object.keys(notifications).length < 1) _getNotifications();
-
-      firebase.updateFoldersData("userId", folders);
-    } else {
-      setFolders([
-        {
-          name: DEFAULT_FOLDER_NAME,
-          slug: slugify(DEFAULT_FOLDER_NAME),
-          channels: [],
-        },
-      ]);
-    }
-  }, [folders]);
 
   function getFolderBySlug(slug) {
     return folders.filter((folder) => folder.slug === slug)[0];
@@ -108,7 +119,7 @@ export function FavoritesProvider({ children }) {
     return { updatedSlug: slugify(newName) };
   }
 
-  async function removeFavorite(channelId, folderName = DEFAULT_FOLDER_NAME) {
+  async function removeFavorite(channelId, folderName) {
     if (!channelId) return;
 
     setFolders((prevfolders) =>
@@ -148,12 +159,22 @@ export function FavoritesProvider({ children }) {
   }
 
   useEffect(() => {
-    firebase
-      .getFoldersData("userId")
-      .then(({ data }) => setFolders(makeFolders(data)));
+    firebase.getFoldersData("userId").then(({ data }) => {
+      if (!data) return;
+
+      setFolders(makeFolders(data.folders));
+      _getNotifications(data.folders);
+    });
   }, []);
 
+  useEffect(() => {
+    if (folders.length < 1) return;
+
+    firebase.updateFoldersData("userId", folders);
+  }, [folders]);
+
   const value = {
+    addFolder,
     addFavorite,
     removeFavorite,
     folders,
