@@ -83,6 +83,12 @@
   margin: 0;
 
   text-align: center;
+  max-width: 100px;
+}
+.channel > a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .badge {

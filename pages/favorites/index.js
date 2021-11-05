@@ -69,17 +69,18 @@ export default function FavoritesPage() {
                           alt="Channel thumbnail"
                           width={channel.thumbnail.width}
                           height={channel.thumbnail.height}
+                          className={styles.channelImage}
                         />
                         {notifications[channel.id] ? (
                           <span className={styles.badge}></span>
                         ) : null}
-                        <p
-                          className={styles.channelName}
-                          style={{ marginTop: "0.5rem" }}
-                        >
-                          {channel.title}
-                        </p>
                       </div>
+                      <p
+                        className={styles.channelName}
+                        style={{ marginTop: "0.5rem" }}
+                      >
+                        {channel.title}
+                      </p>
                     </a>
                   </li>
                 ))
