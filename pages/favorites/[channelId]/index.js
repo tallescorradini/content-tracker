@@ -52,36 +52,42 @@ export default function FavoriteChannel() {
               <header>
                 <h3 className={styles.sectionTitle}>New</h3>
               </header>
-              <ul
-                className={styles.newChannelActivityList}
-                style={{ marginTop: "1rem" }}
-              >
-                {notifications[channel.id]?.activities.map((activity) => (
-                  <li key={activity.id} style={{ marginTop: "1rem" }}>
-                    <a
-                      onClick={() => {}}
-                      href={activity.videoUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={styles.channelActivity}
-                    >
-                      <img
-                        src={activity.thumbnail.url}
-                        alt="activity thumbnail"
-                        width={activity.thumbnail.width}
-                        height={activity.thumbnail.height}
-                        className={styles.activityThumbnail}
-                      />
-                      <h4 className={styles.activityTitle}>{activity.title}</h4>
-                      <span className={styles.activityPublishedDate}>
-                        {new Date(activity.publishedAt).toLocaleDateString(
-                          "en-US"
-                        )}
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
+              {!!notifications[channel.id].totalNotifications ? (
+                <ul
+                  className={styles.newChannelActivityList}
+                  style={{ marginTop: "1rem" }}
+                >
+                  {notifications[channel.id]?.activities.map((activity) => (
+                    <li key={activity.id} style={{ marginTop: "1rem" }}>
+                      <a
+                        onClick={() => {}}
+                        href={activity.videoUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={styles.channelActivity}
+                      >
+                        <img
+                          src={activity.thumbnail.url}
+                          alt="activity thumbnail"
+                          width={activity.thumbnail.width}
+                          height={activity.thumbnail.height}
+                          className={styles.activityThumbnail}
+                        />
+                        <h4 className={styles.activityTitle}>
+                          {activity.title}
+                        </h4>
+                        <span className={styles.activityPublishedDate}>
+                          {new Date(activity.publishedAt).toLocaleDateString(
+                            "en-US"
+                          )}
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Empty list</p>
+              )}
               {/* {notifications[channel.id]?.totalNotifications > 3 ? (
                 <button>Load More</button>
               ) : null} */}
