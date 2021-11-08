@@ -97,7 +97,7 @@ export function FavoritesProvider({ children }) {
         });
         setNotifications((prev) => ({
           ...prev,
-          [channel.id]: data.totalNotifications,
+          [channel.id]: data,
         }));
       });
     });
@@ -150,12 +150,29 @@ export function FavoritesProvider({ children }) {
   }
 
   function _updateChannelNotification(channelId) {
-    setNotifications((prev) => ({ ...prev, [channelId]: 0 }));
+    setNotifications((prev) => ({
+      ...prev,
+      [channelId]: { items: [], totalNotifications: 0 },
+    }));
   }
 
   function onAccessChannel(channelId) {
     _updateLastAccess(channelId);
     _updateChannelNotification(channelId);
+  }
+
+  function getChannel(channelId) {
+    // check all folders because channels data is not denormalized
+    const filteredFolders = folders.filter(
+      (folder) =>
+        folder.channels.filter((channel) => channel.id === channelId)[0]
+    );
+
+    const channel = filteredFolders[0]?.channels.filter(
+      (channel) => channel.id === channelId
+    )[0];
+
+    return channel;
   }
 
   useEffect(() => {
@@ -180,8 +197,9 @@ export function FavoritesProvider({ children }) {
     folders,
     getFolderBySlug,
     updateFolderName,
-    onAccessChannel,
+    onAccessChannel, // will be deprecated
     notifications,
+    getChannel,
   };
   return (
     <FavoritesContext.Provider value={value}>

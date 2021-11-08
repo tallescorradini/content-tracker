@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 
 import styles from "./Favorites.module.css";
 import { ButtonLink } from "../../components/ButtonLink/ButtonLink.jsx";
@@ -57,35 +58,34 @@ export default function FavoritesPage() {
               ) : (
                 folder.channels?.map((channel) => (
                   <li key={channel.id} className={styles.channel}>
-                    <a
-                      onClick={() => onAccessChannel(channel.id)}
-                      href={channel.url}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
+                    <Link href={`favorites/${channel.id}`} passHref>
                       <div>
-                        <Image
-                          src={channel.thumbnail.url}
-                          alt="Channel thumbnail"
-                          width={channel.thumbnail.width}
-                          height={channel.thumbnail.height}
-                          className={styles.channelImage}
-                        />
-                        {!!notifications[channel.id] ? (
-                          <span className={styles.badge}>
-                            {notifications[channel.id] > 9
-                              ? `${notifications[channel.id]}+`
-                              : notifications[channel.id]}
-                          </span>
-                        ) : null}
+                        <div>
+                          <Image
+                            src={channel.thumbnail.url}
+                            alt="Channel thumbnail"
+                            width={channel.thumbnail.width}
+                            height={channel.thumbnail.height}
+                            className={styles.channelImage}
+                          />
+                          {!!notifications[channel.id]?.totalNotifications ? (
+                            <span className={styles.badge}>
+                              {notifications[channel.id].totalNotifications > 9
+                                ? `${
+                                    notifications[channel.id].totalNotifications
+                                  }+`
+                                : notifications[channel.id].totalNotifications}
+                            </span>
+                          ) : null}
+                        </div>
+                        <p
+                          className={styles.channelName}
+                          style={{ marginTop: "0.5rem" }}
+                        >
+                          {channel.title}
+                        </p>
                       </div>
-                      <p
-                        className={styles.channelName}
-                        style={{ marginTop: "0.5rem" }}
-                      >
-                        {channel.title}
-                      </p>
-                    </a>
+                    </Link>
                   </li>
                 ))
               )}

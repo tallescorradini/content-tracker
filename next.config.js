@@ -1,7 +1,7 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ["yt3.ggpht.com"],
+    domains: ["yt3.ggpht.com", "i.ytimg.com"],
   },
   env: {
     FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
