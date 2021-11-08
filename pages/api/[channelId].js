@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       }
     );
 
-    res.status(200).json({ hasNotifications: !!data.pageInfo.totalResults });
+    res.status(200).json({ totalNotifications: data.pageInfo.totalResults });
   } catch (error) {
     res.status(400).json({ code: "unknown" });
   }

@@ -71,8 +71,12 @@ export default function FavoritesPage() {
                           height={channel.thumbnail.height}
                           className={styles.channelImage}
                         />
-                        {notifications[channel.id] ? (
-                          <span className={styles.badge}></span>
+                        {!!notifications[channel.id] ? (
+                          <span className={styles.badge}>
+                            {notifications[channel.id] > 9
+                              ? `${notifications[channel.id]}+`
+                              : notifications[channel.id]}
+                          </span>
                         ) : null}
                       </div>
                       <p

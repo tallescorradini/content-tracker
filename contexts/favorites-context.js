@@ -97,7 +97,7 @@ export function FavoritesProvider({ children }) {
         });
         setNotifications((prev) => ({
           ...prev,
-          [channel.id]: data.hasNotifications,
+          [channel.id]: data.totalNotifications,
         }));
       });
     });
@@ -150,7 +150,7 @@ export function FavoritesProvider({ children }) {
   }
 
   function _updateChannelNotification(channelId) {
-    setNotifications((prev) => ({ ...prev, [channelId]: false }));
+    setNotifications((prev) => ({ ...prev, [channelId]: 0 }));
   }
 
   function onAccessChannel(channelId) {
