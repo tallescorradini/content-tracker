@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 export default function FavoriteChannel() {
   const router = useRouter();
   const [channel, setChannel] = useState();
-  const { getChannel, notifications } = useFavorites();
+  const { getChannel, notifications, onAccessNewActivity } = useFavorites();
 
   useEffect(() => {
     const channelId = router.query.channelId;
@@ -60,7 +60,7 @@ export default function FavoriteChannel() {
                   {notifications[channel.id]?.activities.map((activity) => (
                     <li key={activity.id} style={{ marginTop: "1rem" }}>
                       <a
-                        onClick={() => {}}
+                        onClick={() => onAccessNewActivity(activity)}
                         href={activity.videoUrl}
                         target="_blank"
                         rel="noreferrer"

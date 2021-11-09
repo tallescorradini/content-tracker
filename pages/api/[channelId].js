@@ -15,7 +15,7 @@ export default async function handler(req, res) {
           order: "date",
           publishedAfter: publishedAfter,
           fields:
-            "(items(id,snippet(publishedAt,title,thumbnails/default),contentDetails/upload/videoId),nextPageToken,pageInfo/totalResults)",
+            "(items(id,snippet(publishedAt,channelId,title,thumbnails/default),contentDetails/upload/videoId),nextPageToken,pageInfo/totalResults)",
           key: process.env.YOUTUBE_API_KEY,
         },
       }
@@ -38,6 +38,7 @@ function makeThumbnail(thumbnail = {}) {
 function makeActivityItems(items = []) {
   return items.map((item) => ({
     id: item.id,
+    channelId: item.snippet.channelId,
     videoUrl: `https://www.youtube.com/watch?v=${item.contentDetails.upload?.videoId}`,
     publishedAt: item.snippet.publishedAt,
     title: item.snippet.title,
@@ -48,6 +49,5 @@ function makeActivityItems(items = []) {
 function makeChannelActivities(data) {
   return {
     activities: makeActivityItems(data.items),
-    totalNotifications: data.pageInfo.totalResults,
   };
 }

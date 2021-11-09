@@ -14,6 +14,7 @@ function makeChannels(channels = []) {
     url: channel.url,
     videoCount: channel.videoCount,
     lastAccess: channel.lastAccess,
+    hiddenActivities: channel.hiddenActivities || [],
   }));
 }
 

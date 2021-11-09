@@ -95,9 +95,17 @@ export function FavoritesProvider({ children }) {
         const { data } = await axios.get(`/api/${channel.id}`, {
           params: { publishedAfter: channel.lastAccess },
         });
+
+        const filteredActivities = data.activities.filter(
+          (activity) => !channel.hiddenActivities?.includes(activity.id)
+        );
+
         setNotifications((prev) => ({
           ...prev,
-          [channel.id]: data,
+          [channel.id]: {
+            activities: filteredActivities,
+            totalNotifications: filteredActivities?.length || 0,
+          },
         }));
       });
     });
@@ -137,28 +145,43 @@ export function FavoritesProvider({ children }) {
     );
   }
 
-  function _updateLastAccess(channelId) {
+  function onAccessNewActivity(activity) {
+    const { id: activityId, channelId } = activity;
+
     setFolders((prevFolders) =>
       prevFolders.map((folder) => ({
         ...folder,
         channels: folder.channels.map((channel) => {
           if (channel.id !== channelId) return channel;
-          return { ...channel, lastAccess: new Date().toISOString() };
+
+          const hiddenActivities = _removeDuplicates([
+            ...channel.hiddenActivities,
+            activityId,
+          ]);
+
+          setNotifications((prevNotifications) => {
+            const filteredActivities = prevNotifications[
+              channel.id
+            ].activities.filter(
+              (activity) => !hiddenActivities.includes(activity.id)
+            );
+            return {
+              ...prevNotifications,
+              [channel.id]: {
+                ...prevNotifications[channel.id],
+                activities: filteredActivities,
+                totalNotifications: filteredActivities.length,
+              },
+            };
+          });
+
+          return {
+            ...channel,
+            hiddenActivities: hiddenActivities,
+          };
         }),
       }))
     );
-  }
-
-  function _updateChannelNotification(channelId) {
-    setNotifications((prev) => ({
-      ...prev,
-      [channelId]: { items: [], totalNotifications: 0 },
-    }));
-  }
-
-  function onAccessChannel(channelId) {
-    _updateLastAccess(channelId);
-    _updateChannelNotification(channelId);
   }
 
   function getChannel(channelId) {
@@ -197,7 +220,7 @@ export function FavoritesProvider({ children }) {
     folders,
     getFolderBySlug,
     updateFolderName,
-    onAccessChannel, // will be deprecated
+    onAccessNewActivity,
     notifications,
     getChannel,
   };
