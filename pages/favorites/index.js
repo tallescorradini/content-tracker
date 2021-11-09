@@ -71,9 +71,7 @@ export default function FavoritesPage() {
                           {!!notifications[channel.id]?.totalNotifications ? (
                             <span className={styles.badge}>
                               {notifications[channel.id].totalNotifications > 9
-                                ? `${
-                                    notifications[channel.id].totalNotifications
-                                  }+`
+                                ? "9+"
                                 : notifications[channel.id].totalNotifications}
                             </span>
                           ) : null}
