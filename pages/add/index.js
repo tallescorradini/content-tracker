@@ -38,9 +38,11 @@ export default function Add() {
     router.push("/favorites");
   }
 
-  function handleSubmit() {
-    const folderSlug = addFolder(values[formFields.folderName.attribute.name]);
-    router.replace(`/edit/${folderSlug}`);
+  async function handleSubmit() {
+    const folder = await addFolder(
+      values[formFields.folderName.attribute.name]
+    );
+    router.replace(`/edit/${folder.slug}`);
   }
 
   return (

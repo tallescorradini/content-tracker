@@ -56,13 +56,15 @@ export function FavoritesProvider({ children }) {
       })
     );
 
-    const folder = {
+    const folder = makeFolder({
       name: folderName,
       slug: slugify(folderName),
       channels: channels,
-    };
+    });
 
     setFolders((prevFolders) => [...prevFolders, folder]);
+
+    return folder;
   }
 
   async function addFavorite(url, folderName) {
@@ -202,17 +204,6 @@ export function FavoritesProvider({ children }) {
     setFolders((prevFolder) =>
       prevFolder.filter((folder) => folder.name !== folderName)
     );
-  }
-
-  function addFolder(folderName) {
-    const slug = slugify(folderName);
-
-    setFolders((prevFolders) => [
-      ...prevFolders,
-      makeFolder({ name: folderName, slug: slug }),
-    ]);
-
-    return slug;
   }
 
   useEffect(() => {
