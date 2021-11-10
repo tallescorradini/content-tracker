@@ -30,10 +30,12 @@ const formFields = {
 
 export default function Folder() {
   const router = useRouter();
-  const { getFolderBySlug, updateFolderName, removeFavorite } = useFavorites();
+  const { getFolderBySlug, updateFolderName, removeFavorite, deleteFolder } =
+    useFavorites();
   const { subscribe, onSubmit, values, changed, resetField } = useForm(yup);
   const [folder, setFolder] = useState();
   const [activeListItem, setActiveListItem] = useState(null);
+  const [toggleOverlay, setToggleOverlay] = useState(false);
 
   function handleReturn() {
     router.push("/favorites");
@@ -53,6 +55,11 @@ export default function Folder() {
 
   function handleRemoveChannel(channelId) {
     removeFavorite(channelId, folder.name);
+  }
+
+  function handleDeleteFolder(folderName) {
+    deleteFolder(folderName);
+    router.replace(`/favorites`);
   }
 
   useEffect(() => {
@@ -148,6 +155,40 @@ export default function Folder() {
                 ))
               )}
             </ul>
+            <Button
+              onClick={() => setToggleOverlay(true)}
+              variant="secondary"
+              style={{ marginTop: "2rem" }}
+              fullWidth
+            >
+              Delete Folder
+            </Button>
+            {toggleOverlay ? (
+              <div className={styles.deleteConfirmation}>
+                <section className={styles.deleteContainer}>
+                  <h2 className={styles.deleteHeading}>
+                    This action cannot be undone, do you really want to delete
+                    this folder?
+                  </h2>
+                  <Button
+                    onClick={() => handleDeleteFolder(folder.name)}
+                    variant="secondary"
+                    style={{ marginTop: "2rem" }}
+                    fullWidth
+                  >
+                    Yes, delete this folder
+                  </Button>
+                  <Button
+                    onClick={() => setToggleOverlay(false)}
+                    variant="neutral"
+                    style={{ marginTop: "1rem" }}
+                    fullWidth
+                  >
+                    No, return to folder
+                  </Button>
+                </section>
+              </div>
+            ) : null}
           </section>
         </section>
       </main>

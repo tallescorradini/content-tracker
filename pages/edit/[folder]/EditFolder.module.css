@@ -103,3 +103,29 @@
   align-items: center;
   gap: 1rem;
 }
+
+.deleteConfirmation {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  height: 100vh;
+  width: 100vw;
+  background-color: hsla(0, 0%, 7%, 75%);
+}
+
+.deleteContainer {
+  max-width: 30rem;
+  padding: 4rem 3rem;
+
+  text-align: center;
+  background-color: hsl(0, 0%, 12%);
+}
+.deleteHeading {
+  margin: 0;
+}

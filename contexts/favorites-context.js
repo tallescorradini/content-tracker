@@ -198,6 +198,12 @@ export function FavoritesProvider({ children }) {
     return channel;
   }
 
+  function deleteFolder(folderName) {
+    setFolders((prevFolder) =>
+      prevFolder.filter((folder) => folder.name !== folderName)
+    );
+  }
+
   useEffect(() => {
     firebase.getFoldersData("userId").then(({ data }) => {
       if (!data) return;
@@ -223,6 +229,7 @@ export function FavoritesProvider({ children }) {
     onAccessNewActivity,
     notifications,
     getChannel,
+    deleteFolder,
   };
   return (
     <FavoritesContext.Provider value={value}>
