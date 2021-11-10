@@ -1,13 +1,12 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
-import Image from "next/image";
 import * as yup from "yup";
 
 import styles from "./AddFolder.module.css";
 import { TextField } from "../../components/TextField/TextField";
 import { Button } from "../../components/Button/Button";
 import useForm from "../../hooks/useForm";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useFavorites } from "../../contexts/favorites-context";
 import { ButtonLink } from "../../components/ButtonLink/ButtonLink.jsx";
 
@@ -32,11 +31,6 @@ export default function Add() {
   const router = useRouter();
   const { addFolder } = useFavorites();
   const { subscribe, onSubmit, values, changed, resetField } = useForm(yup);
-  const [folder, setFolder] = useState();
-
-  function handleReturn() {
-    router.push("/favorites");
-  }
 
   async function handleSubmit() {
     const folder = await addFolder(
@@ -58,7 +52,7 @@ export default function Add() {
             className={styles.containerHeader}
             style={{ marginBottom: "3rem" }}
           >
-            <Button variant="neutral" onClick={handleReturn}>{`<`}</Button>
+            <ButtonLink variant="neutral" href="/favorites">{`<`}</ButtonLink>
             <h1 className={styles.title}>Add Folder</h1>
           </header>
 
