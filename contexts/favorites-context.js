@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 import { firebase } from "../services/firebase";
-import { makeFolders } from "./interfaces/folders";
+import { makeFolders, makeFolder } from "./interfaces/folders";
 
 const FavoritesContext = React.createContext();
 
@@ -202,6 +202,17 @@ export function FavoritesProvider({ children }) {
     setFolders((prevFolder) =>
       prevFolder.filter((folder) => folder.name !== folderName)
     );
+  }
+
+  function addFolder(folderName) {
+    const slug = slugify(folderName);
+
+    setFolders((prevFolders) => [
+      ...prevFolders,
+      makeFolder({ name: folderName, slug: slug }),
+    ]);
+
+    return slug;
   }
 
   useEffect(() => {

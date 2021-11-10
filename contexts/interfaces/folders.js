@@ -18,6 +18,14 @@ function makeChannels(channels = []) {
   }));
 }
 
+export function makeFolder(folder = {}) {
+  return {
+    name: folder.name,
+    slug: folder.slug,
+    channels: makeChannels(folder.channels),
+  };
+}
+
 export function makeFolders(folders = []) {
   return folders.map((folder) => ({
     name: folder.name,
