@@ -10,19 +10,6 @@ export function useFavorites() {
   return useContext(FavoritesContext);
 }
 
-function slugify(folderName) {
-  return folderName
-    .toString()
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w\-]+/g, "")
-    .replace(/\-\-+/g, "-")
-    .replace(/^-+/, "")
-    .replace(/-+$/, "");
-  //
-}
-
 export function FavoritesProvider({ children }) {
   const [folders, setFolders] = useState([]);
   const [notifications, setNotifications] = useState({});
@@ -58,7 +45,6 @@ export function FavoritesProvider({ children }) {
 
     const folder = makeFolder({
       name: folderName,
-      slug: slugify(folderName),
       channels: channels,
     });
 
@@ -118,15 +104,19 @@ export function FavoritesProvider({ children }) {
   }
 
   function updateFolderName({ oldName, newName }) {
+    let updatedSlug;
+
     setFolders((prevfolders) =>
       prevfolders.map((prevFolder) => {
         if (prevFolder.name === oldName) {
-          return { ...prevFolder, name: newName, slug: slugify(newName) };
+          const updatedFolder = makeFolder({ ...prevFolder, name: newName });
+          updatedSlug = updatedFolder.slug;
+          return updatedFolder;
         }
         return prevFolder;
       })
     );
-    return { updatedSlug: slugify(newName) };
+    return { updatedSlug: updatedSlug };
   }
 
   async function removeFavorite(channelId, folderName) {

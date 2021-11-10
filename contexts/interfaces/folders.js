@@ -1,3 +1,15 @@
+function slugify(folderName) {
+  return folderName
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\-]+/g, "")
+    .replace(/\-\-+/g, "-")
+    .replace(/^-+/, "")
+    .replace(/-+$/, "");
+}
+
 function makeThumbnail(thumbnail = []) {
   return {
     url: thumbnail.url,
@@ -21,7 +33,7 @@ function makeChannels(channels = []) {
 export function makeFolder(folder = {}) {
   return {
     name: folder.name,
-    slug: folder.slug,
+    slug: slugify(folder.name),
     channels: makeChannels(folder.channels),
   };
 }
