@@ -200,8 +200,9 @@ export function FavoritesProvider({ children }) {
     firebaseService.db.getFoldersData("userId").then(({ data }) => {
       if (!data) return;
 
-      setFolders(makeFolders(data.folders));
-      _getNotifications(data.folders);
+      const folders = makeFolders(data.folders);
+      setFolders(folders);
+      _getNotifications(folders);
     });
   }, []);
 
