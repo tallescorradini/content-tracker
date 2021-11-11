@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
-import { firebase } from "../services/firebase";
+import { firebaseService } from "../services/firebase";
 import { makeFolders, makeFolder } from "./interfaces/folders";
 
 const FavoritesContext = React.createContext();
@@ -197,7 +197,7 @@ export function FavoritesProvider({ children }) {
   }
 
   useEffect(() => {
-    firebase.getFoldersData("userId").then(({ data }) => {
+    firebaseService.db.getFoldersData("userId").then(({ data }) => {
       if (!data) return;
 
       setFolders(makeFolders(data.folders));
@@ -208,7 +208,7 @@ export function FavoritesProvider({ children }) {
   useEffect(() => {
     if (folders.length < 1) return;
 
-    firebase.updateFoldersData("userId", folders);
+    firebaseService.db.updateFoldersData("userId", folders);
   }, [folders]);
 
   const value = {
