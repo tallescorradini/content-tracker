@@ -1,5 +1,5 @@
 export function makeUser(user) {
   return Object.freeze({
-    userId: user.uid,
+    id: user.uid,
   });
 }

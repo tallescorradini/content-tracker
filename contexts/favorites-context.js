@@ -3,6 +3,7 @@ import axios from "axios";
 
 import { firebaseService } from "../services/firebase";
 import { makeFolders, makeFolder } from "./models/folders";
+import { useAuth } from "./auth-context";
 
 const FavoritesContext = React.createContext();
 
@@ -13,6 +14,7 @@ export function useFavorites() {
 export function FavoritesProvider({ children }) {
   const [folders, setFolders] = useState([]);
   const [notifications, setNotifications] = useState({});
+  const { userId } = useAuth();
 
   function _getChannelId(url) {
     if (!url) return;
@@ -197,20 +199,23 @@ export function FavoritesProvider({ children }) {
   }
 
   useEffect(() => {
-    firebaseService.db.getFoldersData("userId").then(({ data }) => {
+    if (!userId) return;
+
+    firebaseService.db.getFoldersData(userId).then(({ data }) => {
       if (!data) return;
 
       const folders = makeFolders(data.folders);
       setFolders(folders);
       _getNotifications(folders);
     });
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
+    if (!userId) return;
     if (folders.length < 1) return;
 
-    firebaseService.db.updateFoldersData("userId", folders);
-  }, [folders]);
+    firebaseService.db.updateFoldersData(userId, folders);
+  }, [userId, folders]);
 
   const value = {
     addFolder,

@@ -2,13 +2,13 @@ import { ref, set, child, get } from "firebase/database";
 
 import { database } from "./firebaseApp";
 
-export function updateFoldersData(userId = "userId", data) {
+export function updateFoldersData(userId, data) {
   set(ref(database, `${userId}`), {
     folders: data,
   });
 }
 
-export async function getFoldersData(userId = "userId") {
+export async function getFoldersData(userId) {
   const dbRef = ref(database);
   try {
     const snapshot = await get(child(dbRef, `${userId}`));
