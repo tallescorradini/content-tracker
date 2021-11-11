@@ -1,6 +1,7 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 import { firebaseService } from "../services/firebase";
+import { makeUser } from "./interfaces/user";
 
 export const AuthContext = createContext();
 
@@ -26,6 +27,8 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
+  const [user, setUser] = useState();
+
   async function signup(email, password) {
     try {
       await firebaseService.auth.createUser({ email, password });
@@ -34,7 +37,27 @@ export function AuthProvider({ children }) {
     }
   }
 
+  async function login(email, password) {
+    try {
+      await firebaseService.auth.signIn(email, password);
+    } catch (err) {
+      return _getAuthenticationError(err.code);
+    }
+  }
+
+  useEffect(() => {
+    firebaseService.auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(makeUser(user));
+      } else {
+        setUser(null);
+      }
+    });
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ signup }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ signup, login }}>
+      {children}
+    </AuthContext.Provider>
   );
 }

@@ -9,6 +9,7 @@ import { Box } from "../components/Box/Box";
 import { Form } from "../components/Form/Form";
 import { TextField } from "../components/TextField/TextField";
 import { Button } from "../components/Button/Button";
+import { ButtonLink } from "../components/ButtonLink/ButtonLink.jsx";
 import { Alert } from "../components/Alert/Alert";
 import { useFavorites } from "../contexts/favorites-context";
 
@@ -67,29 +68,34 @@ export default function Home() {
           Youtube channels
         </h1>
 
-        <Box style={{ width: "400px" }}>
-          <h2 style={{ margin: "0 0 2rem 0" }}>
-            Insert any Youtube channel URL to start
-          </h2>
+        <div>
+          <Box style={{ display: "inline-block", width: "400px" }}>
+            <h2 style={{ margin: "0 0 2rem 0" }}>
+              Insert any Youtube channel URL to start
+            </h2>
 
-          {showAlert.message ? (
-            <Alert
-              message={showAlert.message}
-              onDismiss={() => setShowAlert(false)}
-              style={{ marginBottom: "2rem" }}
-            />
-          ) : null}
+            {showAlert.message ? (
+              <Alert
+                message={showAlert.message}
+                onDismiss={() => setShowAlert(false)}
+                style={{ marginBottom: "2rem" }}
+              />
+            ) : null}
 
-          <Form {...onSubmit(handleSubmit)}>
-            <TextField {...subscribe(formFields.url)} />
+            <Form {...onSubmit(handleSubmit)}>
+              <TextField {...subscribe(formFields.url)} />
 
-            <Button variant="primary" type="submit">
-              Continue
-            </Button>
-          </Form>
-        </Box>
+              <Button variant="primary" type="submit">
+                Continue
+              </Button>
+            </Form>
+          </Box>
 
-        {/* <Login/> */}
+          <span style={{ margin: "0 4rem" }}>or</span>
+          <ButtonLink href="/login" variant="secondary">
+            Login
+          </ButtonLink>
+        </div>
       </main>
     </div>
   );
