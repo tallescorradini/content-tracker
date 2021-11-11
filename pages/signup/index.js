@@ -55,6 +55,7 @@ export default function Signup() {
       setShowAlert({
         message: errorMessages[error] || errorMessages["auth/default"],
       });
+      return;
     }
 
     router.replace("/favorites");
