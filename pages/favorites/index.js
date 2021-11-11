@@ -5,9 +5,11 @@ import Link from "next/link";
 import styles from "./Favorites.module.css";
 import { ButtonLink } from "../../components/ButtonLink/ButtonLink.jsx";
 import { useFavorites } from "../../contexts/favorites-context";
+import { useAuth } from "../../contexts/auth-context";
 
 export default function FavoritesPage() {
   const { folders, onAccessChannel, notifications } = useFavorites();
+  const { userId } = useAuth();
 
   return (
     <div className={styles.page}>
@@ -25,19 +27,21 @@ export default function FavoritesPage() {
       </header>
 
       <main>
-        <section
-          role="alert"
-          className={styles.alert}
-          style={{ marginTop: "2rem" }}
-        >
-          <p>
-            Make sure to sign up or all progress will be lost when you leave the
-            page.
-          </p>
-          <ButtonLink href="/signup" variant="secondary">
-            Sign up
-          </ButtonLink>
-        </section>
+        {!userId ? (
+          <section
+            role="alert"
+            className={styles.alert}
+            style={{ marginTop: "2rem" }}
+          >
+            <p>
+              Make sure to sign up or all progress will be lost when you leave
+              the page.
+            </p>
+            <ButtonLink href="/signup" variant="secondary">
+              Sign up
+            </ButtonLink>
+          </section>
+        ) : null}
 
         {folders.map((folder) => (
           <section
