@@ -6,7 +6,7 @@ import * as yup from "yup";
 import styles from "./AddChannel.module.css";
 import useForm from "../../../../hooks/useForm";
 import { useFavorites } from "../../../../contexts/favorites-context";
-import { ButtonLink } from "../../../../components/ButtonLink/ButtonLink.jsx.jsx";
+import { ButtonLink } from "../../../../components/ButtonLink/ButtonLink";
 import { TextField } from "../../../../components/TextField/TextField.jsx";
 import { Button } from "../../../../components/Button/Button.jsx";
 import { Alert } from "../../../../components/Alert/Alert";

@@ -9,7 +9,7 @@ import { Box } from "../components/Box/Box";
 import { Form } from "../components/Form/Form";
 import { TextField } from "../components/TextField/TextField";
 import { Button } from "../components/Button/Button";
-import { ButtonLink } from "../components/ButtonLink/ButtonLink.jsx";
+import { ButtonLink } from "../components/ButtonLink/ButtonLink";
 import { Alert } from "../components/Alert/Alert";
 import { useFavorites } from "../contexts/favorites-context";
 

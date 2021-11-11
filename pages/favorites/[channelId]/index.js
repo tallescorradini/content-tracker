@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import styles from "./FavoriteChannel.module.css";
 import { useFavorites } from "../../../contexts/favorites-context";
-import { ButtonLink } from "../../../components/ButtonLink/ButtonLink.jsx";
+import { ButtonLink } from "../../../components/ButtonLink/ButtonLink";
 import { useEffect, useState } from "react";
 
 export default function FavoriteChannel() {

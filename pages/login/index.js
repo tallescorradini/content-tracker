@@ -6,7 +6,7 @@ import * as yup from "yup";
 import styles from "./Login.module.css";
 import { TextField } from "../../components/TextField/TextField";
 import { Button } from "../../components/Button/Button";
-import { ButtonLink } from "../../components/ButtonLink/ButtonLink.jsx";
+import { ButtonLink } from "../../components/ButtonLink/ButtonLink";
 import { Alert } from "../../components/Alert/Alert";
 import useForm from "../../hooks/useForm";
 import { useAuth } from "../../contexts/auth-context";

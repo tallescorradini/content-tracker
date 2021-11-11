@@ -8,7 +8,7 @@ import { Button } from "../../components/Button/Button";
 import useForm from "../../hooks/useForm";
 import { useState } from "react";
 import { useFavorites } from "../../contexts/favorites-context";
-import { ButtonLink } from "../../components/ButtonLink/ButtonLink.jsx";
+import { ButtonLink } from "../../components/ButtonLink/ButtonLink";
 
 const formFields = {
   folderName: {

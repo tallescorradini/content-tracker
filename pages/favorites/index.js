@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import styles from "./Favorites.module.css";
-import { ButtonLink } from "../../components/ButtonLink/ButtonLink.jsx";
+import { ButtonLink } from "../../components/ButtonLink/ButtonLink";
 import { Button } from "../../components/Button/Button";
 import { useFavorites } from "../../contexts/favorites-context";
 import { useAuth } from "../../contexts/auth-context";
