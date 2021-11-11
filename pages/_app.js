@@ -1,12 +1,15 @@
 import "../styles/globals.css";
 
 import { FavoritesProvider } from "../contexts/favorites-context";
+import { AuthProvider } from "../contexts/auth-context";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <FavoritesProvider>
-      <Component {...pageProps} />
-    </FavoritesProvider>
+    <AuthProvider>
+      <FavoritesProvider>
+        <Component {...pageProps} />
+      </FavoritesProvider>
+    </AuthProvider>
   );
 }
 
