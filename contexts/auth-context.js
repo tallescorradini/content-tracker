@@ -45,6 +45,14 @@ export function AuthProvider({ children }) {
     }
   }
 
+  async function logout() {
+    try {
+      firebaseService.auth.signOut();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
     firebaseService.auth.onAuthStateChanged((user) => {
       if (user) {
@@ -56,7 +64,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ signup, login, userId: user?.id }}>
+    <AuthContext.Provider value={{ signup, login, userId: user?.id, logout }}>
       {children}
     </AuthContext.Provider>
   );

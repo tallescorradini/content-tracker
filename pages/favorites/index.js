@@ -1,15 +1,23 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import styles from "./Favorites.module.css";
 import { ButtonLink } from "../../components/ButtonLink/ButtonLink.jsx";
+import { Button } from "../../components/Button/Button";
 import { useFavorites } from "../../contexts/favorites-context";
 import { useAuth } from "../../contexts/auth-context";
 
 export default function FavoritesPage() {
+  const router = useRouter();
   const { folders, onAccessChannel, notifications } = useFavorites();
-  const { userId } = useAuth();
+  const { userId, logout } = useAuth();
+
+  function handleLogout() {
+    logout();
+    router.replace("/");
+  }
 
   return (
     <div className={styles.page}>
@@ -20,10 +28,24 @@ export default function FavoritesPage() {
       </Head>
 
       <header className={styles.header}>
-        <h1>My Favorites</h1>
-        <ButtonLink href="/add" variant="primary">
-          Add
-        </ButtonLink>
+        <div>
+          <h1 style={{ display: "inline-block", margin: "0" }}>My Favorites</h1>
+          <ButtonLink
+            href="/add"
+            variant="primary"
+            style={{
+              marginLeft: "2rem",
+              maxHeight: "2rem",
+              padding: "0.5rem 1.5rem",
+            }}
+          >
+            Add
+          </ButtonLink>
+        </div>
+
+        <Button onClick={handleLogout} variant="neutral">
+          Logout
+        </Button>
       </header>
 
       <main>

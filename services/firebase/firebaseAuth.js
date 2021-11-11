@@ -2,6 +2,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged as firebaseOnAuthStateChanged,
   signInWithEmailAndPassword,
+  signOut as firebaseSignOut,
 } from "firebase/auth";
 
 import { auth } from "./firebaseApp";
@@ -16,4 +17,8 @@ export function onAuthStateChanged(callbackFunction) {
 
 export async function signIn(email, password) {
   await signInWithEmailAndPassword(auth, email, password);
+}
+
+export async function signOut() {
+  await firebaseSignOut(auth);
 }
