@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 import { firebaseService } from "../services/firebase";
-import { makeFolders, makeFolder } from "./interfaces/folders";
+import { makeFolders, makeFolder } from "./models/folders";
 
 const FavoritesContext = React.createContext();
 

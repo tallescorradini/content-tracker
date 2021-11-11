@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
 import { firebaseService } from "../services/firebase";
-import { makeUser } from "./interfaces/user";
+import { makeUser } from "./models/user";
 
 export const AuthContext = createContext();
 
