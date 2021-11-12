@@ -199,7 +199,11 @@ export function FavoritesProvider({ children }) {
   }
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      setFolders([]);
+      setNotifications({});
+      return;
+    }
 
     firebaseService.db.getFoldersData(userId).then(({ data }) => {
       if (!data) return;
