@@ -14,13 +14,14 @@ import { Alert } from "../components/Alert/Alert";
 import { useFavorites } from "../contexts/favorites-context";
 
 const formFields = {
-  url: {
-    attribute: { name: "url", label: "Url", type: "text" },
+  userChannelId: {
+    attribute: {
+      name: "userChannelId",
+      label: "Your Channel ID",
+      type: "text",
+    },
     initialValue: "",
-    validation: yup
-      .string()
-      .required("Campo obrigatório")
-      .matches(/www.youtube.com\/c/, "URL fornecida é inválida"),
+    validation: yup.string().ensure().trim().required("Campo obrigatório"),
   },
 };
 
@@ -33,13 +34,13 @@ export default function Home() {
   const router = useRouter();
   const { subscribe, onSubmit, values } = useForm(yup);
   const [showAlert, setShowAlert] = useState({ message: "" });
-  const { addFavorite, addFolder } = useFavorites();
+  const { addUncategorizedFolder } = useFavorites();
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     try {
-      await addFolder("Uncategorized", [values.url]);
+      await addUncategorizedFolder(values.userChannelId);
       router.push({
         pathname: "/favorites",
       });
@@ -71,7 +72,7 @@ export default function Home() {
         <div>
           <Box style={{ display: "inline-block", width: "400px" }}>
             <h2 style={{ margin: "0 0 2rem 0" }}>
-              Insert any Youtube channel URL to start
+              Insert your Youtube channel ID to start
             </h2>
 
             {showAlert.message ? (
@@ -83,7 +84,7 @@ export default function Home() {
             ) : null}
 
             <Form {...onSubmit(handleSubmit)}>
-              <TextField {...subscribe(formFields.url)} />
+              <TextField {...subscribe(formFields.userChannelId)} />
 
               <Button variant="primary" type="submit">
                 Continue

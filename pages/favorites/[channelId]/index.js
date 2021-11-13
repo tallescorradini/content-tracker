@@ -36,10 +36,10 @@ export default function FavoriteChannel() {
             <section className={styles.section}>
               <div className={styles.channel}>
                 <Image
-                  src={channel.thumbnail.url}
+                  src={channel.thumbnailUrl}
                   alt="Channel thumbnail"
-                  width={channel.thumbnail.width}
-                  height={channel.thumbnail.height}
+                  width="80px"
+                  height="80px"
                   className={styles.channelImage}
                 />
 
@@ -52,7 +52,7 @@ export default function FavoriteChannel() {
               <header>
                 <h3 className={styles.sectionTitle}>New</h3>
               </header>
-              {!!notifications[channel.id].totalNotifications ? (
+              {!!notifications[channel.id]?.totalNotifications ? (
                 <ul
                   className={styles.newChannelActivityList}
                   style={{ marginTop: "1rem" }}
@@ -67,10 +67,10 @@ export default function FavoriteChannel() {
                         className={styles.channelActivity}
                       >
                         <img
-                          src={activity.thumbnail.url}
+                          src={activity.thumbnailUrl}
                           alt="activity thumbnail"
-                          width={activity.thumbnail.width}
-                          height={activity.thumbnail.height}
+                          width="80px"
+                          height="80px"
                           className={styles.activityThumbnail}
                         />
                         <h4 className={styles.activityTitle}>

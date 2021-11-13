@@ -27,14 +27,6 @@ export default async function handler(req, res) {
   }
 }
 
-function makeThumbnail(thumbnail = {}) {
-  return {
-    url: thumbnail.url,
-    width: parseInt(thumbnail.width),
-    height: parseInt(thumbnail.height),
-  };
-}
-
 function makeActivityItems(items = []) {
   return items.map((item) => ({
     id: item.id,
@@ -42,7 +34,7 @@ function makeActivityItems(items = []) {
     videoUrl: `https://www.youtube.com/watch?v=${item.contentDetails.upload?.videoId}`,
     publishedAt: item.snippet.publishedAt,
     title: item.snippet.title,
-    thumbnail: makeThumbnail(item.snippet.thumbnails.default),
+    thumbnailUrl: item.snippet.thumbnails.default.url,
   }));
 }
 

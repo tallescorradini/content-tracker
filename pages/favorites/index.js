@@ -88,10 +88,10 @@ export default function FavoritesPage() {
                       <div>
                         <div>
                           <Image
-                            src={channel.thumbnail.url}
+                            src={channel.thumbnailUrl}
                             alt="Channel thumbnail"
-                            width={channel.thumbnail.width}
-                            height={channel.thumbnail.height}
+                            width="80px"
+                            height="80px"
                             className={styles.channelImage}
                           />
                           {!!notifications[channel.id]?.totalNotifications ? (

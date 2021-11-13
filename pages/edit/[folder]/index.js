@@ -135,7 +135,7 @@ export default function Folder() {
                   >
                     <div className={styles.channel}>
                       <Image
-                        src={channel.thumbnail.url}
+                        src={channel.thumbnailUrl}
                         alt="Channel thumbnail"
                         width={24}
                         height={24}

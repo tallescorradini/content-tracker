@@ -10,21 +10,11 @@ function slugify(folderName) {
     .replace(/-+$/, "");
 }
 
-function makeThumbnail(thumbnail = []) {
-  return {
-    url: thumbnail.url,
-    width: parseInt(thumbnail.width) || undefined,
-    height: parseInt(thumbnail.height) || undefined,
-  };
-}
-
 function makeChannels(channels = []) {
   return channels.map((channel) => ({
     id: channel.id,
     title: channel.title,
-    thumbnail: makeThumbnail(channel.thumbnail),
-    url: channel.url,
-    videoCount: channel.videoCount,
+    thumbnailUrl: channel.thumbnailUrl,
     lastAccess: channel.lastAccess,
     hiddenActivities: channel.hiddenActivities || [],
   }));

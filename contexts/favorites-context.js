@@ -28,6 +28,7 @@ export function FavoritesProvider({ children }) {
   }
 
   async function addFolder(folderName, channelUrls = []) {
+    // receive channels instead of channelUrls
     const channelIds = _removeDuplicates(
       channelUrls.map((channelUrl) => _getChannelId(channelUrl))
     );
@@ -198,6 +199,19 @@ export function FavoritesProvider({ children }) {
     );
   }
 
+  async function addUncategorizedFolder(userChannelId) {
+    const { data: channels } = await axios.get("/api/subscriptions", {
+      params: { userChannelId: userChannelId },
+    });
+
+    const folder = makeFolder({
+      name: "Uncategorized",
+      channels: channels,
+    });
+
+    setFolders([folder]);
+  }
+
   useEffect(() => {
     if (!userId) {
       setFolders([]);
@@ -232,6 +246,7 @@ export function FavoritesProvider({ children }) {
     notifications,
     getChannel,
     deleteFolder,
+    addUncategorizedFolder,
   };
   return (
     <FavoritesContext.Provider value={value}>
