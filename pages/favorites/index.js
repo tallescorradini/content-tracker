@@ -73,9 +73,11 @@ export default function FavoritesPage() {
           >
             <header className={styles.folderHeader}>
               <h2 clasname={styles.folderTitle}>{folder.name}</h2>
-              <ButtonLink href={`/edit/${folder.slug}`} variant="neutral">
-                Edit
-              </ButtonLink>
+              {folder.name !== "Uncategorized" ? (
+                <ButtonLink href={`/edit/${folder.slug}`} variant="neutral">
+                  Edit
+                </ButtonLink>
+              ) : null}
             </header>
 
             <ul className={styles.channelList}>

@@ -64,8 +64,11 @@ export default function Folder() {
 
   useEffect(() => {
     const slug = router.query.folder;
-
     if (!slug) return;
+    if (router.query.folder === "uncategorized") {
+      router.replace("/favorites");
+    }
+
     const folder = getFolderBySlug(slug);
 
     setFolder(folder);
