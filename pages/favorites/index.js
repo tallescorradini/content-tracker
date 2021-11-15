@@ -65,7 +65,7 @@ export default function FavoritesPage() {
           </section>
         ) : null}
 
-        {folders.map((folder) => (
+        {[...folders].reverse().map((folder) => (
           <section
             key={folder.name}
             className={styles.folder}
