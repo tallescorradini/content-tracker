@@ -147,10 +147,12 @@ const useForm = (yup) => {
     initialValues = { ...initialValues, [fieldName]: field.initialValue };
     schema = { ...schema, [fieldName]: field.validation };
 
+    console.log({ [fieldName]: field.initialValue });
     const inputFields = {
       id: field.id,
       name: fieldName,
       label: field.attribute.label,
+      value: changed[fieldName] ? values[fieldName] : initialValues[fieldName],
       type: field.attribute.type,
       onChange: _handleInputChange,
       errors: errors[fieldName],
