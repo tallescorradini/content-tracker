@@ -53,8 +53,8 @@ export default function Folder() {
     resetField(formFields.folderName.attribute.name);
   }
 
-  function handleRemoveChannel(channelId) {
-    removeFavorite(channelId, folder.name);
+  function handleRemoveChannel(channel) {
+    removeFavorite(channel, folder.name);
   }
 
   function handleDeleteFolder(folderName) {
@@ -148,7 +148,7 @@ export default function Folder() {
 
                     {channel.id === activeListItem ? (
                       <Button
-                        onClick={() => handleRemoveChannel(channel.id)}
+                        onClick={() => handleRemoveChannel(channel)}
                         variant="secondary"
                       >
                         Remove

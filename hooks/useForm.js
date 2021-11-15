@@ -76,12 +76,25 @@ const useForm = (yup) => {
     }));
   };
 
+  const _handleCheckboxChange = (e) => {
+    const fieldName = e.target.name;
+    const fieldValue = e.target.checked;
+
+    const fieldHasErrors = errors[fieldName] && errors[fieldName].length > 0;
+    if (fieldHasErrors) _validateField(fieldName, fieldValue);
+
+    setValues((prev) => ({ ...prev, [fieldName]: fieldValue }));
+    setChanged((prev) => ({
+      ...prev,
+      [fieldName]: fieldValue !== initialValues[fieldName],
+    }));
+  };
+
   const _validateField = async (fieldName, fieldValue) => {
     const validationErrors = await _getValidationErrors({
       schema: { [fieldName]: schema[fieldName] },
       values: { [fieldName]: fieldValue },
     });
-
     setErrors((prev) => _sanitizeFormErrors({ ...prev, ...validationErrors }));
   };
 
@@ -114,20 +127,39 @@ const useForm = (yup) => {
     },
   });
 
-  const subscribe = (field) => {
+  function _makeCheckboxField(field) {
     const fieldName = field.attribute.name;
-    initialValues = { ...initialValues, [fieldName]: field.initialValue || "" };
-    schema = { ...schema, [fieldName]: field.validation };
-
     return {
+      id: field.attribute.id,
       name: fieldName,
       label: field.attribute.label,
       type: field.attribute.type,
-      value: changed[fieldName] ? values[fieldName] : initialValues[fieldName],
+      checked: changed[fieldName]
+        ? values[fieldName]
+        : initialValues[fieldName],
+      onChange: _handleCheckboxChange,
+      errors: errors[fieldName],
+    };
+  }
+
+  const subscribe = (field) => {
+    const fieldName = field.attribute.name;
+    initialValues = { ...initialValues, [fieldName]: field.initialValue };
+    schema = { ...schema, [fieldName]: field.validation };
+
+    const inputFields = {
+      id: field.id,
+      name: fieldName,
+      label: field.attribute.label,
+      type: field.attribute.type,
       onChange: _handleInputChange,
       errors: errors[fieldName],
       onBlur: _handleInputBlur,
     };
+
+    return field.attribute.type === "checkbox"
+      ? _makeCheckboxField(field)
+      : inputFields;
   };
 
   return {

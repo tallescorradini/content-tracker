@@ -27,28 +27,9 @@ export function FavoritesProvider({ children }) {
     return [...new Set(array)];
   }
 
-  async function addFolder(folderName, channelUrls = []) {
-    // receive channels instead of channelUrls
-    const channelIds = _removeDuplicates(
-      channelUrls.map((channelUrl) => _getChannelId(channelUrl))
-    );
-
-    const channels = await Promise.all(
-      channelIds.map(async (channelId) => {
-        const { data } = await axios.get("/api/favorites", {
-          params: { channelId: channelId },
-        });
-        const channelData = {
-          ...data,
-          lastAccess: new Date().toISOString(),
-        };
-        return channelData;
-      })
-    );
-
+  async function addFolder(folderName) {
     const folder = makeFolder({
       name: folderName,
-      channels: channels,
     });
 
     setFolders((prevFolders) => [...prevFolders, folder]);
@@ -56,28 +37,40 @@ export function FavoritesProvider({ children }) {
     return folder;
   }
 
-  async function addFavorite(url, folderName) {
-    const channelId = _getChannelId(url);
+  function _getUncategorizedFolder() {
+    return folders.filter((folder) => folder.name === "Uncategorized")[0];
+  }
 
-    const { data } = await axios.get("/api/favorites", {
-      params: { channelId: channelId },
-    });
+  function _removeFromUncategorizedFolder(channelIdsToFilterOut = []) {
+    setFolders((prevfolders) =>
+      prevfolders.map((folder) => {
+        if (folder.name !== "Uncategorized") return folder;
 
-    const channelData = { ...data, lastAccess: new Date().toISOString() };
+        const updatedChannels = folder.channels.filter(
+          (channel) => !channelIdsToFilterOut.includes(channel.id)
+        );
+
+        return { ...folder, channels: updatedChannels };
+      })
+    );
+  }
+
+  function addFavorite(channelIds = [], folderName) {
+    const uncategorizedChannels = _getUncategorizedFolder().channels;
+
+    const channels = uncategorizedChannels.filter((channel) =>
+      channelIds.includes(channel.id)
+    );
 
     setFolders((prevfolders) =>
       prevfolders.map((folder) => {
         if (folder.name !== folderName) return folder;
 
-        const isIncluded = folder.channels.reduce(
-          (result, current) => current.id === channelData.id || result,
-          false
-        );
-
-        if (isIncluded) return folder;
-        return { ...folder, channels: [...folder.channels, channelData] };
+        return { ...folder, channels: [...folder.channels, ...channels] };
       })
     );
+
+    _removeFromUncategorizedFolder(channelIds);
   }
 
   function _getNotifications(folders) {
@@ -122,7 +115,18 @@ export function FavoritesProvider({ children }) {
     return { updatedSlug: updatedSlug };
   }
 
-  async function removeFavorite(channelId, folderName) {
+  function _addToUncategorizedFolder(channelToAdd) {
+    setFolders((prevfolders) =>
+      prevfolders.map((folder) => {
+        if (folder.name !== "Uncategorized") return folder;
+
+        return { ...folder, channels: [...folder.channels, channelToAdd] };
+      })
+    );
+  }
+
+  function removeFavorite(channel, folderName) {
+    const channelId = channel.id;
     if (!channelId) return;
 
     setFolders((prevfolders) =>
@@ -138,6 +142,8 @@ export function FavoritesProvider({ children }) {
         return prevFolder;
       })
     );
+
+    _addToUncategorizedFolder(channel);
   }
 
   function onAccessNewActivity(activity) {
