@@ -269,8 +269,7 @@ export function FavoritesProvider({ children }) {
     firebaseService.db.getFoldersData(userId).then(async ({ data }) => {
       if (!data) return;
       const folders = makeFolders(data.folders);
-      const updatedFolders = await _updateFolders(folders, userYoutubeId); // will be async
-
+      const updatedFolders = await _updateFolders(folders, userYoutubeId);
       setFolders(updatedFolders);
       _getNotifications(updatedFolders);
     });

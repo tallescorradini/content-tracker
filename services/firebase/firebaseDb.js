@@ -13,7 +13,7 @@ export async function getFoldersData(userId) {
   try {
     const snapshot = await get(child(dbRef, `${userId}`));
 
-    if (!snapshot.exists()) return { data: [] };
+    if (!snapshot.exists()) return { data: null };
 
     return { data: snapshot.val() };
   } catch (error) {
@@ -31,7 +31,6 @@ export async function getUserData(userId) {
   const dbRef = ref(database);
   try {
     const snapshot = await get(child(dbRef, `users/${userId}`));
-
     if (!snapshot.exists()) return { data: null };
 
     return { data: snapshot.val() };

@@ -63,6 +63,8 @@ export function AuthProvider({ children }) {
         setUser(user);
 
         const { data } = await firebaseService.db.getUserData(user.id);
+        if (!data) return;
+
         setUserYoutubeId(data.youtubeId);
       } else {
         setUser(null);
