@@ -38,7 +38,6 @@ async function getUserSubscriptions(userChannelId) {
     subscriptions = [...subscriptions, ...restData.items];
   } while (!!pageToken);
 
-
   return subscriptions;
 }
 

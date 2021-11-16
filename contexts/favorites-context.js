@@ -14,7 +14,7 @@ export function useFavorites() {
 export function FavoritesProvider({ children }) {
   const [folders, setFolders] = useState([]);
   const [notifications, setNotifications] = useState({});
-  const { userId } = useAuth();
+  const { userId, userYoutubeId } = useAuth();
 
   function _getChannelId(url) {
     if (!url) return;
@@ -218,21 +218,63 @@ export function FavoritesProvider({ children }) {
     setFolders([folder]);
   }
 
+  async function _updateFolders(currentFolders = [], userYoutubeId) {
+    // fetch current_subscriptions
+    const { data: subscriptions } = await axios.get("/api/subscriptions", {
+      params: {
+        userChannelId: userYoutubeId,
+      },
+    });
+
+    let uncategorized = subscriptions;
+
+    // loop folders
+    const updatedFolders = currentFolders.map((currentFolder) => ({
+      ...currentFolder,
+      channels: currentFolder.channels.filter((channel) => {
+        const isCurrentSubscription = subscriptions.some(
+          (subscription) => subscription.id === channel.id
+        );
+
+        // remove channel if not subscribed anymore
+        if (!isCurrentSubscription) return false;
+
+        uncategorized = uncategorized.filter(
+          (subscription) => subscription.id !== channel.id
+        );
+
+        // otherwise keep channel
+        return true;
+      }),
+    }));
+
+    return updatedFolders.map((folder) => {
+      if (folder.name !== "Uncategorized") return folder;
+
+      return { ...folder, channels: [...folder.channels, ...uncategorized] };
+    });
+  }
+
   useEffect(() => {
-    if (!userId) {
-      setFolders([]);
-      setNotifications({});
+    // new user and has provided an youtubeId
+    if (!userId && userYoutubeId) {
+      addUncategorizedFolder(userYoutubeId);
       return;
     }
 
-    firebaseService.db.getFoldersData(userId).then(({ data }) => {
-      if (!data) return;
+    // new user and did not provide an youtubeId
+    if (!userId || !userYoutubeId) return;
 
+    // user is logged in
+    firebaseService.db.getFoldersData(userId).then(async ({ data }) => {
+      if (!data) return;
       const folders = makeFolders(data.folders);
-      setFolders(folders);
-      _getNotifications(folders);
+      const updatedFolders = await _updateFolders(folders, userYoutubeId); // will be async
+
+      setFolders(updatedFolders);
+      _getNotifications(updatedFolders);
     });
-  }, [userId]);
+  }, [userId, userYoutubeId]);
 
   useEffect(() => {
     if (!userId) return;

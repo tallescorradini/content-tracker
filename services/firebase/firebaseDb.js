@@ -20,3 +20,22 @@ export async function getFoldersData(userId) {
     console.log(error);
   }
 }
+
+export async function updateUserYoutubeId(userId, userYoutubeId) {
+  set(ref(database, `users/${userId}`), {
+    youtubeId: userYoutubeId,
+  });
+}
+
+export async function getUserData(userId) {
+  const dbRef = ref(database);
+  try {
+    const snapshot = await get(child(dbRef, `users/${userId}`));
+
+    if (!snapshot.exists()) return { data: null };
+
+    return { data: snapshot.val() };
+  } catch (error) {
+    console.log(error);
+  }
+}

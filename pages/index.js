@@ -11,7 +11,7 @@ import { TextField } from "../components/TextField/TextField";
 import { Button } from "../components/Button/Button";
 import { ButtonLink } from "../components/ButtonLink/ButtonLink";
 import { Alert } from "../components/Alert/Alert";
-import { useFavorites } from "../contexts/favorites-context";
+import { useAuth } from "../contexts/auth-context";
 
 const formFields = {
   userChannelId: {
@@ -34,13 +34,13 @@ export default function Home() {
   const router = useRouter();
   const { subscribe, onSubmit, values } = useForm(yup);
   const [showAlert, setShowAlert] = useState({ message: "" });
-  const { addUncategorizedFolder } = useFavorites();
+  const { setUserYoutubeId } = useAuth();
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     try {
-      await addUncategorizedFolder(values.userChannelId);
+      setUserYoutubeId(values.userChannelId);
       router.push({
         pathname: "/favorites",
       });

@@ -8,7 +8,8 @@ import {
 import { auth } from "./firebaseApp";
 
 export async function createUser({ email, password }) {
-  await createUserWithEmailAndPassword(auth, email, password);
+  const { user } = await createUserWithEmailAndPassword(auth, email, password);
+  return user.uid;
 }
 
 export function onAuthStateChanged(callbackFunction) {

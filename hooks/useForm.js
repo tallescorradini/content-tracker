@@ -147,7 +147,6 @@ const useForm = (yup) => {
     initialValues = { ...initialValues, [fieldName]: field.initialValue };
     schema = { ...schema, [fieldName]: field.validation };
 
-    console.log({ [fieldName]: field.initialValue });
     const inputFields = {
       id: field.id,
       name: fieldName,

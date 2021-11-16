@@ -28,10 +28,13 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState();
+  const [userYoutubeId, setUserYoutubeId] = useState();
 
   async function signup(email, password) {
     try {
-      await firebaseService.auth.createUser({ email, password });
+      if (!userYoutubeId) throw new Error("auth/missing-youtube-id");
+      const userId = await firebaseService.auth.createUser({ email, password });
+      await firebaseService.db.updateUserYoutubeId(userId, userYoutubeId);
     } catch (err) {
       return _getAuthenticationError(err.code);
     }
@@ -54,9 +57,13 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    firebaseService.auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(makeUser(user));
+    firebaseService.auth.onAuthStateChanged(async (userAuth) => {
+      if (userAuth) {
+        const user = makeUser(userAuth);
+        setUser(user);
+
+        const { data } = await firebaseService.db.getUserData(user.id);
+        setUserYoutubeId(data.youtubeId);
       } else {
         setUser(null);
       }
@@ -64,7 +71,16 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ signup, login, userId: user?.id, logout }}>
+    <AuthContext.Provider
+      value={{
+        signup,
+        login,
+        userId: user?.id,
+        logout,
+        userYoutubeId,
+        setUserYoutubeId,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
