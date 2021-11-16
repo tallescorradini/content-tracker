@@ -43,9 +43,11 @@ export default function FavoritesPage() {
           </ButtonLink>
         </div>
 
-        <Button onClick={handleLogout} variant="neutral">
-          Logout
-        </Button>
+        {userId ? (
+          <Button onClick={handleLogout} variant="neutral">
+            Logout
+          </Button>
+        ) : null}
       </header>
 
       <main>
