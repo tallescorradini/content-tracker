@@ -2,6 +2,8 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import styles from "./Favorites.module.css";
 import { ButtonLink } from "../../components/ButtonLink/ButtonLink";
@@ -13,6 +15,7 @@ export default function FavoritesPage() {
   const router = useRouter();
   const { folders, onAccessChannel, notifications } = useFavorites();
   const { userId, logout } = useAuth();
+  const { t } = useTranslation("favoritesPage");
 
   function handleLogout() {
     logout();
@@ -22,14 +25,16 @@ export default function FavoritesPage() {
   return (
     <div className={styles.page}>
       <Head>
-        <title>My Favorites</title>
-        <meta name="description" content="Favorite's pannel" />
+        <title>{t("My Favorites")}</title>
+        <meta name="description" content={t("Favorite's pannel")} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <header className={styles.header}>
         <div>
-          <h1 style={{ display: "inline-block", margin: "0" }}>My Favorites</h1>
+          <h1 style={{ display: "inline-block", margin: "0" }}>
+            {t("My Favorites")}
+          </h1>
           <ButtonLink
             href="/add"
             variant="primary"
@@ -39,13 +44,13 @@ export default function FavoritesPage() {
               padding: "0.5rem 1.5rem",
             }}
           >
-            Add
+            {t("Add Folder")}
           </ButtonLink>
         </div>
 
         {userId ? (
           <Button onClick={handleLogout} variant="neutral">
-            Logout
+            {t("Logout")}
           </Button>
         ) : null}
       </header>
@@ -58,11 +63,12 @@ export default function FavoritesPage() {
             style={{ marginTop: "2rem" }}
           >
             <p>
-              Make sure to sign up or all progress will be lost when you leave
-              the page.
+              {t(
+                "Make sure to sign up or all progress will be lost when you leave the page."
+              )}
             </p>
             <ButtonLink href="/signup" variant="secondary">
-              Sign up
+              {t("Sign Up")}
             </ButtonLink>
           </section>
         ) : null}
@@ -74,17 +80,21 @@ export default function FavoritesPage() {
             style={{ marginTop: "6rem" }}
           >
             <header className={styles.folderHeader}>
-              <h2 clasname={styles.folderTitle}>{folder.name}</h2>
+              <h2 clasname={styles.folderTitle}>
+                {folder.name !== "Uncategorized"
+                  ? folder.name
+                  : t("Uncategorized")}
+              </h2>
               {folder.name !== "Uncategorized" ? (
                 <ButtonLink href={`/edit/${folder.slug}`} variant="neutral">
-                  Edit
+                  {t("Edit")}
                 </ButtonLink>
               ) : null}
             </header>
 
             <ul className={styles.channelList}>
               {folder.channels?.length < 1 ? (
-                <li className={styles.channel}>List is empty</li>
+                <li className={styles.channel}>{t("List is empty")}</li>
               ) : (
                 folder.channels?.map((channel) => (
                   <li key={channel.id} className={styles.channel}>
@@ -93,7 +103,7 @@ export default function FavoritesPage() {
                         <div>
                           <Image
                             src={channel.thumbnailUrl}
-                            alt="Channel thumbnail"
+                            alt={t("Channel thumbnail")}
                             width="80px"
                             height="80px"
                             className={styles.channelImage}
@@ -124,3 +134,9 @@ export default function FavoritesPage() {
     </div>
   );
 }
+
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["favoritesPage"])),
+  },
+});

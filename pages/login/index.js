@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import * as yup from "yup";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import styles from "./Login.module.css";
 import { TextField } from "../../components/TextField/TextField";
@@ -11,43 +13,45 @@ import { Alert } from "../../components/Alert/Alert";
 import useForm from "../../hooks/useForm";
 import { useAuth } from "../../contexts/auth-context";
 
-const formFields = {
-  email: {
-    attribute: { name: "email", label: "Email", type: "email" },
-    initialValue: "",
-    validation: yup
-      .string()
-      .ensure()
-      .trim()
-      .required("Campo obrigatório")
-      .email("Email inválido"),
-  },
-  password: {
-    attribute: { name: "password", label: "Password", type: "password" },
-    initialValue: "",
-    validation: yup
-      .string()
-      .ensure()
-      .trim()
-      .required("Campo obrigatório")
-      .min(6, "Deve conter ao menos 6 caracteres"),
-  },
-};
-
-const errorMessages = {
-  "auth/wrong-password": "Desculpe, a conta ou senha informada é inválida. ",
-  "auth/user-not-found": "Desculpe, a conta ou senha informada é inválida. ",
-  "auth/too-many-requests": "Desculpe, o limite de tentativas foi excedido. ",
-  "auth/network-request-failed":
-    "Desculpe, cheque sua conexão e tente novamente. ",
-  "auth/default": "Desculpe, algo deu errado. ",
-};
-
 export default function Login() {
   const router = useRouter();
   const { subscribe, onSubmit, values: formValues } = useForm(yup);
   const { login } = useAuth();
   const [showAlert, setShowAlert] = useState({ message: null });
+  const { t } = useTranslation("loginPage");
+
+  const formFields = {
+    email: {
+      attribute: { name: "email", label: "Email", type: "email" },
+      initialValue: "",
+      validation: yup
+        .string()
+        .ensure()
+        .trim()
+        .required(t("Required field"))
+        .email(t("Invalid email")),
+    },
+    password: {
+      attribute: { name: "password", label: t("Password"), type: "password" },
+      initialValue: "",
+      validation: yup
+        .string()
+        .ensure()
+        .trim()
+        .required(t("Required field"))
+        .min(6, t("Must be at least 6 characters long")),
+    },
+  };
+
+  const errorMessages = {
+    "auth/wrong-password": t("Sorry, invalid email or password."),
+    "auth/user-not-found": t("Sorry, invalid email or password."),
+    "auth/too-many-requests": t("Sorry, maximum login attempts exceeded."),
+    "auth/network-request-failed": t(
+      "Sorry, check your connection and try again."
+    ),
+    "auth/default": t("Sorry, something went wrong."),
+  };
 
   async function handleSubmit() {
     const { email, password } = formValues;
@@ -66,8 +70,8 @@ export default function Login() {
   return (
     <div>
       <Head>
-        <title>{`Login`}</title>
-        <meta name="description" content="Login form" />
+        <title>{t("Login")}</title>
+        <meta name="description" content={t("Login form")} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.page}>
@@ -77,7 +81,7 @@ export default function Login() {
             style={{ marginBottom: "3rem" }}
           >
             <ButtonLink variant="neutral" href="/">{`<`}</ButtonLink>
-            <h1 className={styles.title}>Login</h1>
+            <h1 className={styles.title}>{t("Login")}</h1>
           </header>
 
           {showAlert.message ? (
@@ -104,7 +108,7 @@ export default function Login() {
               style={{ marginTop: "1rem" }}
               fullWidth
             >
-              Continue
+              {t("Continue")}
             </Button>
           </form>
         </section>
@@ -112,3 +116,9 @@ export default function Login() {
     </div>
   );
 }
+
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["loginPage"])),
+  },
+});

@@ -1,0 +1,25 @@
+{
+  "Name": "Nome",
+
+  "Required field": "Campo obrigatório",
+  "Must only contain letters and numbers": "Deve conter somente letras e números",
+
+  "Edit Folder": "Editar Pasta",
+  "Page for editing folder details": "Página para editar detalhes da pasta",
+
+  "Discard": "Descartar",
+  "Save": "Salvar",
+
+  "Channels": "Canais",
+  "Add": "Adicionar",
+
+  "List is empty": "Lista está vazia",
+
+  "Channel thumbnail": "Imagem de capa do canal",
+
+  "Delete Folder": "Deletar Pasta",
+
+  "This action cannot be undone, do you really want to delete this folder?": "Esta ação não pode ser desfeita, tem certeza que deseja deletar esta pasta?",
+  "Yes, delete this folder": "Sim, deletar esta pasta",
+  "No, return to folder": "Não, retornar para pasta"
+}

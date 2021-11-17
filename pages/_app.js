@@ -1,5 +1,6 @@
-import "../styles/globals.css";
+import { appWithTranslation } from "next-i18next";
 
+import "../styles/globals.css";
 import { FavoritesProvider } from "../contexts/favorites-context";
 import { AuthProvider } from "../contexts/auth-context";
 
@@ -13,4 +14,4 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);

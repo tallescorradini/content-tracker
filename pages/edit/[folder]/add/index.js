@@ -3,6 +3,8 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import * as yup from "yup";
 import Image from "next/image";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import styles from "./AddChannel.module.css";
 import useForm from "../../../../hooks/useForm";
@@ -15,6 +17,7 @@ export default function AddChannel() {
   const { subscribe, onSubmit, values: formValues } = useForm(yup);
   const { folders, addFavorite, getFolderBySlug } = useFavorites();
   const [uncategorizedChannels, setUncategorizedChannels] = useState([]);
+  const { t } = useTranslation("addChannelPage");
 
   function getChannelsToAdd(formValues) {
     return (
@@ -71,8 +74,8 @@ export default function AddChannel() {
   return (
     <div>
       <Head>
-        <title>Add Channel</title>
-        <meta name="description" content="Add a new channel to folder" />
+        <title>{t("Add Channel")}</title>
+        <meta name="description" content={t("Add a new channel to folder")} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -87,13 +90,13 @@ export default function AddChannel() {
               variant="neutral"
             >{`<`}</ButtonLink>
 
-            <h1 className={styles.title}>Add Channel</h1>
+            <h1 className={styles.title}>{t("Add Channel")}</h1>
           </header>
 
           <form {...onSubmit(handleSubmit)}>
             <fieldset className={styles.channelsList}>
               <legend style={{ marginBottom: "1.5rem" }}>
-                Choose channels to add to folder
+                {t("Choose channels to add to folder")}
               </legend>
 
               {uncategorizedChannels.map((channel) => (
@@ -102,7 +105,7 @@ export default function AddChannel() {
                     <input {...subscribe(formFields[channel.id])} />
                     <Image
                       src={channel.thumbnailUrl}
-                      alt="Channel thumbnail"
+                      alt={t("Channel thumbnail")}
                       width={24}
                       height={24}
                     />
@@ -113,7 +116,7 @@ export default function AddChannel() {
             </fieldset>
 
             <Button type="submit" variant="primary" fullWidth>
-              Save
+              {t("Save")}
             </Button>
           </form>
         </section>
@@ -121,3 +124,9 @@ export default function AddChannel() {
     </div>
   );
 }
+
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["addChannelPage"])),
+  },
+});

@@ -1,0 +1,16 @@
+{
+  "Password": "Senha",
+
+  "Required field": "Campo obrigatório",
+  "Invalid email": "Email inválido",
+  "Must be at least 6 characters long": "Deve conter ao menos 6 caracteres",
+
+  "Sorry, this email is already being used.": "Desculpe, este email já foi utilizado.",
+  "Sorry, check your connection and try again.": "Desculpe, cheque sua conexão e tente novamente.",
+  "Sorry, something went wrong.": "Desculpe, algo deu errado.",
+
+  "Sign Up": "Criar conta",
+  "Signup form": "Formulário de criação da conta",
+
+  "Continue": "Continuar"
+}

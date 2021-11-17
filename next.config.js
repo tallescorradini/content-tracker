@@ -1,8 +1,12 @@
+const { i18n } = require("./next-i18next.config");
+
 module.exports = {
   reactStrictMode: true,
+
   images: {
     domains: ["yt3.ggpht.com", "i.ytimg.com"],
   },
+
   env: {
     FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
     FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
@@ -12,4 +16,5 @@ module.exports = {
     FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
     FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
   },
+  i18n,
 };

@@ -1,0 +1,17 @@
+{
+  "Password": "Senha",
+
+  "Required field": "Campo obrigatório",
+  "Invalid email": "Email inválido",
+  "Must be at least 6 characters long": "Deve conter ao menos 6 caracteres",
+
+  "Sorry, invalid email or password.": "Desculpe, a conta ou senha informada é inválida.",
+  "Sorry, maximum login attempts exceeded.": "Desculpe, o limite de tentativas foi excedido.",
+  "Sorry, check your connection and try again.": "Desculpe, cheque sua conexão e tente novamente.",
+  "Sorry, something went wrong.": "Desculpe, algo deu errado.",
+
+  "Login": "Entrar",
+  "Login form": "Formulário de login",
+
+  "Continue": "Continuar"
+}

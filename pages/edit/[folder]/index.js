@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
 import * as yup from "yup";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import styles from "./EditFolder.module.css";
 import { TextField } from "../../../components/TextField/TextField";
@@ -11,23 +13,6 @@ import { useEffect, useState } from "react";
 import { useFavorites } from "../../../contexts/favorites-context";
 import { ButtonLink } from "../../../components/ButtonLink/ButtonLink";
 
-const formFields = {
-  folderName: {
-    attribute: {
-      name: "folderName",
-      label: "Name",
-      type: "text",
-    },
-    initialValue: "",
-    validation: yup
-      .string()
-      .ensure()
-      .trim()
-      .required("Campo obrigatório")
-      .matches(/^[\w ]+$/g, "Deve conter somente letras e números"),
-  },
-};
-
 export default function Folder() {
   const router = useRouter();
   const { getFolderBySlug, updateFolderName, removeFavorite, deleteFolder } =
@@ -36,6 +21,24 @@ export default function Folder() {
   const [folder, setFolder] = useState();
   const [activeListItem, setActiveListItem] = useState(null);
   const [toggleOverlay, setToggleOverlay] = useState(false);
+  const { t } = useTranslation("editFolderPage");
+
+  const formFields = {
+    folderName: {
+      attribute: {
+        name: "folderName",
+        label: t("Name"),
+        type: "text",
+      },
+      initialValue: "",
+      validation: yup
+        .string()
+        .ensure()
+        .trim()
+        .required(t("Required field"))
+        .matches(/^[\w ]+$/g, t("Must only contain letters and numbers")),
+    },
+  };
 
   function handleReturn() {
     router.push("/favorites");
@@ -79,8 +82,11 @@ export default function Folder() {
   return (
     <div>
       <Head>
-        <title>{`Edit Folder`}</title>
-        <meta name="description" content="Page for editing folder details" />
+        <title>{t("Edit Folder")}</title>
+        <meta
+          name="description"
+          content={t("Page for editing folder details")}
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.page}>
@@ -90,7 +96,7 @@ export default function Folder() {
             style={{ marginBottom: "3rem" }}
           >
             <Button variant="neutral" onClick={handleReturn}>{`<`}</Button>
-            <h1 className={styles.title}>Edit Folder</h1>
+            <h1 className={styles.title}>{t("Edit Folder")}</h1>
           </header>
 
           <form {...onSubmit(handleSubmit)} style={{ marginBottom: "4rem" }}>
@@ -101,10 +107,10 @@ export default function Folder() {
             {changed?.[formFields.folderName.attribute.name] ? (
               <div role="group" className={styles.buttonGroup}>
                 <Button onClick={handleDiscard} variant="secondary">
-                  Discard
+                  {t("Discard")}
                 </Button>
                 <Button type="submit" variant="primary">
-                  Save
+                  {t("Save")}
                 </Button>
               </div>
             ) : null}
@@ -115,17 +121,17 @@ export default function Folder() {
               className={styles.channelsHeader}
               style={{ marginBottom: "2rem" }}
             >
-              <h2 className={styles.channelsTitle}>Channels</h2>
+              <h2 className={styles.channelsTitle}>{t("Channels")}</h2>
               <ButtonLink
                 href={`/edit/${router.query.folder}/add`}
                 variant="primary"
               >
-                Add
+                {t("Add")}
               </ButtonLink>
             </header>
             <ul className={styles.channelsList}>
               {folder?.channels.length < 1 ? (
-                <p>List is empty</p>
+                <p>{t("List is empty")}</p>
               ) : (
                 folder?.channels.map((channel) => (
                   <li
@@ -139,7 +145,7 @@ export default function Folder() {
                     <div className={styles.channel}>
                       <Image
                         src={channel.thumbnailUrl}
-                        alt="Channel thumbnail"
+                        alt={t("Channel thumbnail")}
                         width={24}
                         height={24}
                       />
@@ -164,14 +170,15 @@ export default function Folder() {
               style={{ marginTop: "2rem" }}
               fullWidth
             >
-              Delete Folder
+              {t("Delete Folder")}
             </Button>
             {toggleOverlay ? (
               <div className={styles.deleteConfirmation}>
                 <section className={styles.deleteContainer}>
                   <h2 className={styles.deleteHeading}>
-                    This action cannot be undone, do you really want to delete
-                    this folder?
+                    {t(
+                      "This action cannot be undone, do you really want to delete this folder?"
+                    )}
                   </h2>
                   <Button
                     onClick={() => handleDeleteFolder(folder.name)}
@@ -179,7 +186,7 @@ export default function Folder() {
                     style={{ marginTop: "2rem" }}
                     fullWidth
                   >
-                    Yes, delete this folder
+                    {t("Yes, delete this folder")}
                   </Button>
                   <Button
                     onClick={() => setToggleOverlay(false)}
@@ -187,7 +194,7 @@ export default function Folder() {
                     style={{ marginTop: "1rem" }}
                     fullWidth
                   >
-                    No, return to folder
+                    {t("No, return to folder")}
                   </Button>
                 </section>
               </div>
@@ -198,3 +205,9 @@ export default function Folder() {
     </div>
   );
 }
+
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["editFolderPage"])),
+  },
+});

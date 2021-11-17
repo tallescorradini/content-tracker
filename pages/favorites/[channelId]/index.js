@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import styles from "./FavoriteChannel.module.css";
 import { useFavorites } from "../../../contexts/favorites-context";
@@ -11,6 +13,7 @@ export default function FavoriteChannel() {
   const router = useRouter();
   const [channel, setChannel] = useState();
   const { getChannel, notifications, onAccessNewActivity } = useFavorites();
+  const { t } = useTranslation("favoriteChannelPage");
 
   useEffect(() => {
     const channelId = router.query.channelId;
@@ -22,14 +25,14 @@ export default function FavoriteChannel() {
   return (
     <div className={styles.page}>
       <Head>
-        <title>Notifications</title>
-        <meta name="description" content="Channel's notifications" />
+        <title>{t("Notifications")}</title>
+        <meta name="description" content={t("Channel's notifications")} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.container}>
         <header className={styles.containerHeader}>
           <ButtonLink href={"/favorites"} variant="neutral">{`<`}</ButtonLink>
-          <h2 className={styles.title}>Notifications</h2>
+          <h2 className={styles.title}>{t("Notifications")}</h2>
         </header>
         {channel ? (
           <section>
@@ -37,7 +40,7 @@ export default function FavoriteChannel() {
               <div className={styles.channel}>
                 <Image
                   src={channel.thumbnailUrl}
-                  alt="Channel thumbnail"
+                  alt={t("Channel thumbnail")}
                   width="80px"
                   height="80px"
                   className={styles.channelImage}
@@ -50,7 +53,7 @@ export default function FavoriteChannel() {
             </section>
             <section className={styles.section}>
               <header>
-                <h3 className={styles.sectionTitle}>New</h3>
+                <h3 className={styles.sectionTitle}>{t("New")}</h3>
               </header>
               {!!notifications[channel.id]?.totalNotifications ? (
                 <ul
@@ -68,7 +71,7 @@ export default function FavoriteChannel() {
                       >
                         <img
                           src={activity.thumbnailUrl}
-                          alt="activity thumbnail"
+                          alt={t("Channel activity thumbnail")}
                           width="80px"
                           height="80px"
                           className={styles.activityThumbnail}
@@ -86,7 +89,7 @@ export default function FavoriteChannel() {
                   ))}
                 </ul>
               ) : (
-                <p>Empty list</p>
+                <p>{t("List is empty")}</p>
               )}
               {/* {notifications[channel.id]?.totalNotifications > 3 ? (
                 <button>Load More</button>
@@ -108,3 +111,9 @@ export default function FavoriteChannel() {
     </div>
   );
 }
+
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["favoriteChannelPage"])),
+  },
+});

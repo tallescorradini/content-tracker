@@ -1,0 +1,11 @@
+{
+  "Name": "Nome",
+
+  "Required field": "Campo obrigatório",
+  "Must only contain letters and numbers": "Deve conter somente letras e números",
+
+  "Add Folder": "Adicionar Pasta",
+  "Page for creating a folder": "Página para criar uma pasta",
+
+  "Continue": "Continuar"
+}

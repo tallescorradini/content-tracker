@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
 import * as yup from "yup";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import styles from "./AddFolder.module.css";
 import { TextField } from "../../components/TextField/TextField";
@@ -10,27 +12,28 @@ import { useState } from "react";
 import { useFavorites } from "../../contexts/favorites-context";
 import { ButtonLink } from "../../components/ButtonLink/ButtonLink";
 
-const formFields = {
-  folderName: {
-    attribute: {
-      name: "folderName",
-      label: "Name",
-      type: "text",
-    },
-    initialValue: "",
-    validation: yup
-      .string()
-      .ensure()
-      .trim()
-      .required("Campo obrigatório")
-      .matches(/^[\w ]+$/g, "Deve conter somente letras e números"),
-  },
-};
-
 export default function Add() {
   const router = useRouter();
   const { addFolder } = useFavorites();
   const { subscribe, onSubmit, values, changed, resetField } = useForm(yup);
+  const { t } = useTranslation("addFolderPage");
+
+  const formFields = {
+    folderName: {
+      attribute: {
+        name: "folderName",
+        label: t("Name"),
+        type: "text",
+      },
+      initialValue: "",
+      validation: yup
+        .string()
+        .ensure()
+        .trim()
+        .required(t("Required field"))
+        .matches(/^[\w ]+$/g, t("Must only contain letters and numbers")),
+    },
+  };
 
   async function handleSubmit() {
     const folder = await addFolder(
@@ -42,8 +45,8 @@ export default function Add() {
   return (
     <div>
       <Head>
-        <title>{`Add Folder`}</title>
-        <meta name="description" content="Page for editing folder details" />
+        <title>{t("Add Folder")}</title>
+        <meta name="description" content={t("Page for creating a folder")} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.page}>
@@ -53,7 +56,7 @@ export default function Add() {
             style={{ marginBottom: "3rem" }}
           >
             <ButtonLink variant="neutral" href="/favorites">{`<`}</ButtonLink>
-            <h1 className={styles.title}>Add Folder</h1>
+            <h1 className={styles.title}>{t("Add Folder")}</h1>
           </header>
 
           <form {...onSubmit(handleSubmit)}>
@@ -68,7 +71,7 @@ export default function Add() {
               style={{ marginTop: "1rem" }}
               fullWidth
             >
-              Continue
+              {t("Continue")}
             </Button>
           </form>
         </section>
@@ -76,3 +79,9 @@ export default function Add() {
     </div>
   );
 }
+
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["addFolderPage"])),
+  },
+});
