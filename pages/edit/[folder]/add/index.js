@@ -93,32 +93,36 @@ export default function AddChannel() {
             <h1 className={styles.title}>{t("Add Channel")}</h1>
           </header>
 
-          <form {...onSubmit(handleSubmit)}>
-            <fieldset className={styles.channelsList}>
-              <legend style={{ marginBottom: "1.5rem" }}>
-                {t("Choose channels to add to folder")}
-              </legend>
+          {uncategorizedChannels?.length < 1 ? (
+            <p>{t("All uncategorized channels have already been selected")}</p>
+          ) : (
+            <form {...onSubmit(handleSubmit)}>
+              <fieldset className={styles.channelsList}>
+                <legend style={{ marginBottom: "1.5rem" }}>
+                  {t("Choose channels to add to folder")}
+                </legend>
 
-              {uncategorizedChannels.map((channel) => (
-                <div key={channel.id} style={{ marginBottom: "1rem" }}>
-                  <label htmlFor={channel.id} className={styles.channel}>
-                    <input {...subscribe(formFields[channel.id])} />
-                    <Image
-                      src={channel.thumbnailUrl}
-                      alt={t("Channel thumbnail")}
-                      width={24}
-                      height={24}
-                    />
-                    <span>{channel.title}</span>
-                  </label>
-                </div>
-              ))}
-            </fieldset>
+                {uncategorizedChannels.map((channel) => (
+                  <div key={channel.id} style={{ marginBottom: "1rem" }}>
+                    <label htmlFor={channel.id} className={styles.channel}>
+                      <input {...subscribe(formFields[channel.id])} />
+                      <Image
+                        src={channel.thumbnailUrl}
+                        alt={t("Channel thumbnail")}
+                        width={24}
+                        height={24}
+                      />
+                      <span>{channel.title}</span>
+                    </label>
+                  </div>
+                ))}
+              </fieldset>
 
-            <Button type="submit" variant="primary" fullWidth>
-              {t("Save")}
-            </Button>
-          </form>
+              <Button type="submit" variant="primary" fullWidth>
+                {t("Save")}
+              </Button>
+            </form>
+          )}
         </section>
       </main>
     </div>
