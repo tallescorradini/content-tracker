@@ -11,6 +11,28 @@ import { Button } from "../../components/Button/Button";
 import { useFavorites } from "../../contexts/favorites-context";
 import { useAuth } from "../../contexts/auth-context";
 
+function getSortedChannelsByNotificationPresent(
+  channels = [],
+  notifications = []
+) {
+  return channels.slice().sort((currrentChannel, nextChannel) => {
+    const currentHasLessNotificationsThanNext =
+      notifications[currrentChannel.id]?.totalNotifications <
+      notifications[nextChannel.id]?.totalNotifications;
+    const currentHasMoreNotificationsThanNext =
+      notifications[currrentChannel.id]?.totalNotifications >
+      notifications[nextChannel.id]?.totalNotifications;
+
+    const currentAfterNext = 1;
+    const currentBeforeNext = -1;
+    const sameOrder = 0;
+
+    if (currentHasLessNotificationsThanNext) return currentAfterNext;
+    if (currentHasMoreNotificationsThanNext) return currentBeforeNext;
+    return sameOrder;
+  });
+}
+
 export default function FavoritesPage() {
   const router = useRouter();
   const { folders, onAccessChannel, notifications } = useFavorites();
@@ -96,7 +118,10 @@ export default function FavoritesPage() {
               {folder.channels?.length < 1 ? (
                 <li className={styles.channel}>{t("List is empty")}</li>
               ) : (
-                folder.channels?.map((channel) => (
+                getSortedChannelsByNotificationPresent(
+                  folder.channels,
+                  notifications
+                ).map((channel) => (
                   <li key={channel.id} className={styles.channel}>
                     <Link href={`favorites/${channel.id}`} passHref>
                       <div>
