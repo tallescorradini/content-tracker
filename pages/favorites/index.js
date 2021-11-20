@@ -35,7 +35,7 @@ function getSortedChannelsByNotificationPresent(
 
 export default function FavoritesPage() {
   const router = useRouter();
-  const { folders, onAccessChannel, notifications } = useFavorites();
+  const { folders, notifications } = useFavorites();
   const { userId, logout } = useAuth();
   const { t } = useTranslation("favoritesPage");
 
