@@ -15,6 +15,32 @@ export default function FavoriteChannel() {
   const { getChannel, notifications, onAccessNewActivity } = useFavorites();
   const { t } = useTranslation("favoriteChannelPage");
 
+  function getTimeSincePublished(publishedAt) {
+    if (!publishedAt) return;
+
+    const publishedDate = new Date(publishedAt);
+    const todaysDate = new Date();
+    const differenceInMilliseconds =
+      todaysDate.getTime() - publishedDate.getTime();
+
+    const HOUR_IN_MILLISECONDS = 3600000;
+    const wholeHoursSincePublished = Math.floor(
+      differenceInMilliseconds / HOUR_IN_MILLISECONDS
+    );
+    if (wholeHoursSincePublished === 0) return t("Less than an hour ago");
+    if (wholeHoursSincePublished === 1) return "1 hour ago";
+    if (wholeHoursSincePublished < 24)
+      return `${wholeHoursSincePublished} ${t("hours ago")}`;
+
+    const DAY_IN_MILLISECONDS = 86400000;
+    const wholeDaysSincePublished = Math.floor(
+      differenceInMilliseconds / DAY_IN_MILLISECONDS
+    );
+    if (wholeDaysSincePublished === 1) return t("Yesterday");
+    if (wholeDaysSincePublished > 1)
+      return t("# days ago", { total: wholeDaysSincePublished });
+  }
+
   useEffect(() => {
     const channelId = router.query.channelId;
     if (!channelId) return;
@@ -80,9 +106,7 @@ export default function FavoriteChannel() {
                           {activity.title}
                         </h4>
                         <span className={styles.activityPublishedDate}>
-                          {new Date(activity.publishedAt).toLocaleDateString(
-                            "en-US"
-                          )}
+                          {getTimeSincePublished(activity.publishedAt)}
                         </span>
                       </a>
                     </li>

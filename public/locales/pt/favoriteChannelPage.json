@@ -8,5 +8,12 @@
 
   "Channel activity thumbnail": "Imagem de capa da notificação do canal",
 
-  "List is empty": "Lista está vazia"
+  "List is empty": "Lista está vazia",
+
+  "Less than an hour ago": "Há menos de uma hora",
+  "1 hour ago": "Há uma hora",
+  "hours ago": "horas atrás",
+  "Yesterday": "Ontem",
+  "days ago": "dias atrás",
+  "# days ago": "há {{total}} dias"
 }
