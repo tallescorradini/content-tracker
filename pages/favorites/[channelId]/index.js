@@ -1,15 +1,17 @@
-import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
+import { useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import styles from "./FavoriteChannel.module.css";
 import { useFavorites } from "../../../contexts/favorites-context";
+import { useAuth } from "../../../contexts/auth-context";
 import { ButtonLink } from "../../../components/ButtonLink/ButtonLink";
-import { useEffect, useState } from "react";
 
 export default function FavoriteChannel() {
+  useAuth({ privateRoute: true });
   const router = useRouter();
   const [channel, setChannel] = useState();
   const { getChannel, notifications, onAccessNewActivity } = useFavorites();

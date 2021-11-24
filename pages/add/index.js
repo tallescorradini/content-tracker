@@ -1,18 +1,19 @@
-import { useRouter } from "next/router";
 import Head from "next/head";
 import * as yup from "yup";
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import styles from "./AddFolder.module.css";
+import useForm from "../../hooks/useForm";
+import { useFavorites } from "../../contexts/favorites-context";
+import { useAuth } from "../../contexts/auth-context";
 import { TextField } from "../../components/TextField/TextField";
 import { Button } from "../../components/Button/Button";
-import useForm from "../../hooks/useForm";
-import { useState } from "react";
-import { useFavorites } from "../../contexts/favorites-context";
 import { ButtonLink } from "../../components/ButtonLink/ButtonLink";
 
 export default function Add() {
+  useAuth({ privateRoute: true });
   const router = useRouter();
   const { addFolder } = useFavorites();
   const { subscribe, onSubmit, values, changed, resetField } = useForm(yup);

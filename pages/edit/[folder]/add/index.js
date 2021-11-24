@@ -9,10 +9,12 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import styles from "./AddChannel.module.css";
 import useForm from "../../../../hooks/useForm";
 import { useFavorites } from "../../../../contexts/favorites-context";
+import { useAuth } from "../../../../contexts/auth-context";
 import { ButtonLink } from "../../../../components/ButtonLink/ButtonLink";
 import { Button } from "../../../../components/Button/Button.jsx";
 
 export default function AddChannel() {
+  useAuth({ privateRoute: true });
   const router = useRouter();
   const { subscribe, onSubmit, values: formValues } = useForm(yup);
   const { folders, addFavorite, getFolderBySlug } = useFavorites();

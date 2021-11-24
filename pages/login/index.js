@@ -1,22 +1,22 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
 import Head from "next/head";
 import * as yup from "yup";
+import { useState } from "react";
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import styles from "./Login.module.css";
+import useForm from "../../hooks/useForm";
+import { useAuth } from "../../contexts/auth-context";
 import { TextField } from "../../components/TextField/TextField";
 import { Button } from "../../components/Button/Button";
 import { ButtonLink } from "../../components/ButtonLink/ButtonLink";
 import { Alert } from "../../components/Alert/Alert";
-import useForm from "../../hooks/useForm";
-import { useAuth } from "../../contexts/auth-context";
 
 export default function Login() {
+  const { login } = useAuth({ restrictedRoute: true });
   const router = useRouter();
   const { subscribe, onSubmit, values: formValues } = useForm(yup);
-  const { login } = useAuth();
   const [showAlert, setShowAlert] = useState({ message: null });
   const { t } = useTranslation("loginPage");
 

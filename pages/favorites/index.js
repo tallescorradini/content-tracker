@@ -6,10 +6,10 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import styles from "./Favorites.module.css";
-import { ButtonLink } from "../../components/ButtonLink/ButtonLink";
-import { Button } from "../../components/Button/Button";
 import { useFavorites } from "../../contexts/favorites-context";
 import { useAuth } from "../../contexts/auth-context";
+import { ButtonLink } from "../../components/ButtonLink/ButtonLink";
+import { Button } from "../../components/Button/Button";
 
 function getSortedChannelsByNotificationPresent(
   channels = [],
@@ -34,9 +34,9 @@ function getSortedChannelsByNotificationPresent(
 }
 
 export default function FavoritesPage() {
+  const { userId, logout } = useAuth({ privateRoute: true });
   const router = useRouter();
   const { folders, notifications } = useFavorites();
-  const { userId, logout } = useAuth();
   const { t } = useTranslation("favoritesPage");
 
   function handleLogout() {
