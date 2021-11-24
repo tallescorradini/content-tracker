@@ -7,7 +7,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import styles from "./Favorites.module.css";
 import { useFavorites } from "../../contexts/favorites-context";
-import { useAuth } from "../../contexts/auth-context";
+import { useAuth, withAuth } from "../../contexts/auth-context";
 import { ButtonLink } from "../../components/ButtonLink/ButtonLink";
 import { Button } from "../../components/Button/Button";
 
@@ -33,7 +33,7 @@ function getSortedChannelsByNotificationPresent(
   });
 }
 
-export default function FavoritesPage() {
+function FavoritesPage() {
   const { userId, logout } = useAuth({ privateRoute: true });
   const router = useRouter();
   const { folders, notifications } = useFavorites();
@@ -159,6 +159,8 @@ export default function FavoritesPage() {
     </div>
   );
 }
+
+export default withAuth({ privateRoute: true })(FavoritesPage);
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {

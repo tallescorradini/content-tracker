@@ -23,21 +23,36 @@ function _getAuthenticationError(errorCode) {
   return error;
 }
 
-export function useAuth({
+export function withAuth({
   publicRoute,
   restrictedRoute = false,
   privateRoute = false,
 } = {}) {
-  const { user, isDoneAuthenticating } = useContext(AuthContext);
-  const router = useRouter();
+  // function composition to get type of route as a parameter
+  return (Component) => {
+    // function to return the high order component
+    function HOC(props) {
+      // to decide what should happen after authentication is done
+      const { user, isDoneAuthenticating } = useContext(AuthContext);
+      const router = useRouter();
+      const [showComponent, setShowComponent] = useState(false);
 
-  useEffect(() => {
-    if (!isDoneAuthenticating) return;
+      useEffect(() => {
+        if (!isDoneAuthenticating) return null;
 
-    if (privateRoute && user.isUnauthed) return router.push("/login");
-    if (restrictedRoute && user.isAuthed) return router.back();
-  }, [isDoneAuthenticating]);
+        if (privateRoute && user.isUnauthed) return router.push("/login");
+        if (restrictedRoute && user.isAuthed) return router.back();
 
+        setShowComponent(true);
+      }, [isDoneAuthenticating]);
+
+      return showComponent ? <Component {...props} /> : null;
+    }
+    return HOC;
+  };
+}
+
+export function useAuth() {
   return useContext(AuthContext);
 }
 
@@ -45,9 +60,6 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(makeUser());
   const [userYoutubeId, setUserYoutubeId] = useState();
   const [isDoneAuthenticating, setIsDoneAuthenticating] = useState(false);
-  // UNAUTHED
-  // GUEST
-  // AUTHED
 
   async function signup(email, password) {
     try {

@@ -7,11 +7,10 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import styles from "./FavoriteChannel.module.css";
 import { useFavorites } from "../../../contexts/favorites-context";
-import { useAuth } from "../../../contexts/auth-context";
+import { withAuth } from "../../../contexts/auth-context";
 import { ButtonLink } from "../../../components/ButtonLink/ButtonLink";
 
-export default function FavoriteChannel() {
-  useAuth({ privateRoute: true });
+function FavoriteChannel() {
   const router = useRouter();
   const [channel, setChannel] = useState();
   const { getChannel, notifications, onAccessNewActivity } = useFavorites();
@@ -137,6 +136,8 @@ export default function FavoriteChannel() {
     </div>
   );
 }
+
+export default withAuth({ privateRoute: true })(FavoriteChannel);
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {

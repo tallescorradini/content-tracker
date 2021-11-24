@@ -8,14 +8,12 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import styles from "./EditFolder.module.css";
 import { useEffect, useState } from "react";
 import { useFavorites } from "../../../contexts/favorites-context";
-import { useAuth } from "../../../contexts/auth-context";
 import useForm from "../../../hooks/useForm";
 import { TextField } from "../../../components/TextField/TextField";
 import { Button } from "../../../components/Button/Button";
 import { ButtonLink } from "../../../components/ButtonLink/ButtonLink";
 
-export default function Folder() {
-  useAuth({ privateRoute: true });
+function Folder() {
   const router = useRouter();
   const { getFolderBySlug, updateFolderName, removeFavorite, deleteFolder } =
     useFavorites();
@@ -207,6 +205,8 @@ export default function Folder() {
     </div>
   );
 }
+
+export default withAuth({ privateRoute: true })(Folder);
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {

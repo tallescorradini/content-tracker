@@ -7,14 +7,14 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import styles from "./Signup.module.css";
 import useForm from "../../hooks/useForm";
-import { useAuth } from "../../contexts/auth-context";
+import { useAuth, withAuth } from "../../contexts/auth-context";
 import { TextField } from "../../components/TextField/TextField";
 import { Button } from "../../components/Button/Button";
 import { ButtonLink } from "../../components/ButtonLink/ButtonLink";
 import { Alert } from "../../components/Alert/Alert";
 
-export default function Signup() {
-  const { signup } = useAuth({ restrictedRoute: true });
+function Signup() {
+  const { signup } = useAuth();
   const router = useRouter();
   const { subscribe, onSubmit, values: formValues } = useForm(yup);
   const [showAlert, setShowAlert] = useState({ message: null });
@@ -114,6 +114,8 @@ export default function Signup() {
     </div>
   );
 }
+
+export default withAuth({ restrictedRoute: true })(Signup);
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
