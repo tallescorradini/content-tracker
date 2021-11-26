@@ -7,6 +7,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import styles from "./AddFolder.module.css";
 import useForm from "../../hooks/useForm";
 import { useFavorites } from "../../contexts/favorites-context";
+import { withAuth } from "../../contexts/auth-context";
 import { TextField } from "../../components/TextField/TextField";
 import { Button } from "../../components/Button/Button";
 import { ButtonLink } from "../../components/ButtonLink/ButtonLink";
