@@ -41,7 +41,8 @@ export function withAuth({
         if (!isDoneAuthenticating) return null;
 
         if (privateRoute && user.isUnauthed) return router.push("/login");
-        if (restrictedRoute && user.isAuthed) return router.back();
+        if (restrictedRoute && user.isAuthed)
+          return router.replace("/favorites");
 
         setShowComponent(true);
       }, [isDoneAuthenticating]);

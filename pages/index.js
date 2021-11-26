@@ -13,9 +13,9 @@ import { TextField } from "../components/TextField/TextField";
 import { Button } from "../components/Button/Button";
 import { ButtonLink } from "../components/ButtonLink/ButtonLink";
 import { Alert } from "../components/Alert/Alert";
-import { useAuth } from "../contexts/auth-context";
+import { useAuth, withAuth } from "../contexts/auth-context";
 
-export default function Home() {
+function Home() {
   const router = useRouter();
   const { subscribe, onSubmit, values } = useForm(yup);
   const [showAlert, setShowAlert] = useState({ message: "" });
@@ -103,6 +103,8 @@ export default function Home() {
     </div>
   );
 }
+
+export default withAuth({ restrictedRoute: true })(Home);
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
