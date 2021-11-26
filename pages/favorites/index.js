@@ -53,22 +53,12 @@ function FavoritesPage() {
       </Head>
 
       <header className={styles.header}>
-        <div>
-          <h1 style={{ display: "inline-block", margin: "0" }}>
-            {t("My Favorites")}
-          </h1>
-          <ButtonLink
-            href="/add"
-            variant="primary"
-            style={{
-              marginLeft: "2rem",
-              maxHeight: "2rem",
-              padding: "0.5rem 1.5rem",
-            }}
-          >
-            {t("Add Folder")}
-          </ButtonLink>
-        </div>
+        <h1 style={{ display: "inline-block", margin: "0" }}>
+          {t("My Favorites")}
+        </h1>
+        <ButtonLink href="/add" variant="primary">
+          {t("Add Folder")}
+        </ButtonLink>
 
         {userId ? (
           <Button onClick={handleLogout} variant="neutral">

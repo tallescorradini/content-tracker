@@ -10,15 +10,14 @@
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 2rem;
 }
 .header > h1 {
   margin: 0;
 }
 .header > button {
-  max-height: 2rem;
   padding: 0.5rem 1.5rem;
 }
 
