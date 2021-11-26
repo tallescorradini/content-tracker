@@ -121,7 +121,11 @@ function FavoritesPage() {
                             alt={t("Channel thumbnail")}
                             width="80px"
                             height="80px"
-                            className={styles.channelImage}
+                            className={`${styles.channelImage} ${
+                              !!!notifications[channel.id]?.totalNotifications
+                                ? styles.fadeChannel
+                                : ""
+                            }`}
                           />
                           {!!notifications[channel.id]?.totalNotifications ? (
                             <span className={styles.badge}>
@@ -132,7 +136,11 @@ function FavoritesPage() {
                           ) : null}
                         </div>
                         <p
-                          className={styles.channelName}
+                          className={`${styles.channelName} ${
+                            !!!notifications[channel.id]?.totalNotifications
+                              ? styles.fadeChannel
+                              : ""
+                          }`}
                           style={{ marginTop: "0.5rem" }}
                         >
                           {channel.title}

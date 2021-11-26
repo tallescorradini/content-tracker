@@ -92,6 +92,9 @@
 .channelImage {
   border-radius: 0.25rem;
 }
+.fadeChannel {
+  opacity: 0.5;
+}
 
 .badge {
   position: absolute;
