@@ -1,34 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Favorite Channels
+Favorite Channels is a web app that helps you follow up with your favorite Youtube subscriptions by categorizing channels according to your areas of interest.
 
-## Getting Started
+## How to get started
+1. Access the home page
+2. Insert your youtube channel ID and click continue. Instructions on how to find it: https://support.google.com/youtube/answer/3250431
+3. Create a folder and select channels from the "Uncategorized" channels list
+4. Sign up to save preferences
+5. A badge will indicate recently uploaded videos
+6. Click on the channel to access the list of recently uploaded videos
+7. Click on the video to watch it on Youtube
 
-First, run the development server:
+## User stories
+- User categorize channels in folders
+- User can check channel notifications
+- User can log in/create an account
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Features
+- Users can sign up and save preferences
+  - database and authentication were implemented with Firebase services
+- Future subscriptions will appear on the "Uncategorized" folder
+  - calls Youtube API to get user's subscriptions
+- Unseen notifications will appear in a badge on top of the channel thumbnail
+  - calls Youtube API to get channels activities
+- Channels are sorted in decreasing order of unseen notifications
+- Language support for pt-BR and en-US
+  - by using i18next internalization-framework
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## How to run a copy of the app locally on your machine
+1. Either fork or clone the repository
+2. Open the folder in the CLI and install dependencies by using the `npm i` command
+3. Start the webserver by using the `npm run start` command
+4. Go to http://localhost:3000 to get started using the web app
