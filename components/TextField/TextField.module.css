@@ -1,14 +1,23 @@
 .field {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "label helpIcon"
+    "input input";
 }
 
 .field > label {
+  grid-area: label;
   font-size: 1rem;
   color: #efefef;
 }
 
+.helpIcon {
+  margin-left: 1rem;
+}
+
 .field > input {
+  grid-area: input;
   margin-top: 0.5rem;
 
   padding: 1rem;

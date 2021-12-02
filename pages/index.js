@@ -20,7 +20,7 @@ function Home() {
   const { subscribe, onSubmit, values } = useForm(yup);
   const [showAlert, setShowAlert] = useState({ message: "" });
   const { setUserYoutubeId } = useAuth();
-  const { t } = useTranslation("homePage");
+  const { t, i18n } = useTranslation("homePage");
 
   const formFields = {
     userChannelId: {
@@ -31,6 +31,7 @@ function Home() {
       },
       initialValue: "",
       validation: yup.string().ensure().trim().required(t("Required field")),
+      helperLink: `https://support.google.com/youtube/answer/3250431?hl=${i18n.language}`,
     },
   };
 

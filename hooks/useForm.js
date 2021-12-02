@@ -139,6 +139,7 @@ const useForm = (yup) => {
         : initialValues[fieldName],
       onChange: _handleCheckboxChange,
       errors: errors[fieldName],
+      helperLink: field.helperLink,
     };
   }
 
@@ -156,6 +157,7 @@ const useForm = (yup) => {
       onChange: _handleInputChange,
       errors: errors[fieldName],
       onBlur: _handleInputBlur,
+      helperLink: field.helperLink,
     };
 
     return field.attribute.type === "checkbox"
