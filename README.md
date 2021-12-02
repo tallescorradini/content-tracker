@@ -11,14 +11,14 @@ Favorite Channels is a web app that helps you follow up with your favorite Youtu
 7. Click on the video to watch it on Youtube
 
 ## User stories
-- User categorize channels in folders
+- User can categorize channels in folders
 - User can check channel notifications
 - User can log in/create an account
 
 ## Features
 - Users can sign up and save preferences
   - database and authentication were implemented with Firebase services
-- Future subscriptions will appear on the "Uncategorized" folder
+- Recent subscriptions will appear on the "Uncategorized" folder
   - calls Youtube API to get user's subscriptions
 - Unseen notifications will appear in a badge on top of the channel thumbnail
   - calls Youtube API to get channels activities
@@ -31,3 +31,15 @@ Favorite Channels is a web app that helps you follow up with your favorite Youtu
 2. Open the folder in the CLI and install dependencies by using the `npm i` command
 3. Start the webserver by using the `npm run start` command
 4. Go to http://localhost:3000 to get started using the web app
+
+## Screenshots
+
+- Getting started:
+![favorite_channels-getting_started](https://user-images.githubusercontent.com/43918107/144124154-29ebf3bc-f189-41b5-9754-e0739a873ee6.png)
+
+- Categorized & channel notifications:
+![favorite_channels-notifications](https://user-images.githubusercontent.com/43918107/144124411-df88c17d-dd0a-4965-a82b-662eb53e2a4c.png)
+
+- Uncategorized subscriptions:
+![favorite_channels-uncategorized_folder](https://user-images.githubusercontent.com/43918107/144124521-813bab17-9c2a-4192-9f32-a4d9c1ff1e73.png)
+
