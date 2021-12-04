@@ -80,6 +80,12 @@ export function AuthProvider({ children }) {
     }
   }
 
+  async function loginAsGuest(youtubeId) {
+    return new Promise((resolve) => {
+      setUserYoutubeId(youtubeId, resolve("resolved"));
+    });
+  }
+
   async function logout() {
     try {
       firebaseService.auth.signOut();
@@ -119,8 +125,8 @@ export function AuthProvider({ children }) {
         userId: user?.id,
         logout,
         userYoutubeId,
-        setUserYoutubeId,
         isDoneAuthenticating,
+        loginAsGuest,
       }}
     >
       {children}

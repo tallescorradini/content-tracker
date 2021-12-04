@@ -19,7 +19,7 @@ function Home() {
   const router = useRouter();
   const { subscribe, onSubmit, values } = useForm(yup);
   const [showAlert, setShowAlert] = useState({ message: "" });
-  const { setUserYoutubeId } = useAuth();
+  const { loginAsGuest } = useAuth();
   const { t, i18n } = useTranslation("homePage");
 
   const formFields = {
@@ -44,7 +44,7 @@ function Home() {
     e.preventDefault();
 
     try {
-      setUserYoutubeId(values.userChannelId);
+      await loginAsGuest(values.userChannelId);
       router.push({
         pathname: "/favorites",
       });
