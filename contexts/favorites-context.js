@@ -14,7 +14,7 @@ export function useFavorites() {
 export function FavoritesProvider({ children }) {
   const [folders, setFolders] = useState([]);
   const [notifications, setNotifications] = useState({});
-  const { userId, userYoutubeId } = useAuth();
+  const { userId, userYoutubeId, user } = useAuth();
 
   function _getChannelId(url) {
     if (!url) return;
@@ -256,31 +256,31 @@ export function FavoritesProvider({ children }) {
   }
 
   useEffect(() => {
-    // new user and has provided an youtubeId
-    if (!userId && userYoutubeId) {
-      addUncategorizedFolder(userYoutubeId);
+    if (!user) return;
+
+    if (user.type === "UNKNOWN") return;
+
+    if (user.type === "GUEST") {
+      addUncategorizedFolder(user.youtubeId);
       return;
     }
 
-    // new user and did not provide an youtubeId
-    if (!userId || !userYoutubeId) return;
-
     // user is logged in
-    firebaseService.db.getFoldersData(userId).then(async ({ data }) => {
+    firebaseService.db.getFoldersData(user.id).then(async ({ data }) => {
       if (!data) return;
       const folders = makeFolders(data.folders);
-      const updatedFolders = await _updateFolders(folders, userYoutubeId);
+      const updatedFolders = await _updateFolders(folders, user.youtubeId);
       setFolders(updatedFolders);
       _getNotifications(updatedFolders);
     });
-  }, [userId, userYoutubeId]);
+  }, [user]);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!user?.id) return;
     if (folders.length < 1) return;
 
-    firebaseService.db.updateFoldersData(userId, folders);
-  }, [userId, folders]);
+    firebaseService.db.updateFoldersData(user.id, folders);
+  }, [user?.id, folders]);
 
   const value = {
     addFolder,

@@ -40,12 +40,13 @@ export function withAuth({
       useEffect(() => {
         if (!isDoneAuthenticating) return null;
 
-        if (privateRoute && user.isUnauthed) return router.push("/login");
-        if (restrictedRoute && user.isAuthed)
+        if (privateRoute && user?.type === "UNKNOWN")
+          return router.push("/login");
+        if (restrictedRoute && user?.type === "USER")
           return router.replace("/favorites");
 
         setShowComponent(true);
-      }, [isDoneAuthenticating]);
+      }, [isDoneAuthenticating, user?.type]);
 
       return showComponent ? <Component {...props} /> : null;
     }
@@ -58,15 +59,14 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(makeUser());
-  const [userYoutubeId, setUserYoutubeId] = useState();
+  const [user, setUser] = useState();
   const [isDoneAuthenticating, setIsDoneAuthenticating] = useState(false);
 
   async function signup(email, password) {
     try {
-      if (!userYoutubeId) throw new Error("auth/missing-youtube-id");
+      if (!user?.youtubeId) throw new Error("auth/missing-youtube-id");
       const userId = await firebaseService.auth.createUser({ email, password });
-      await firebaseService.db.updateUserYoutubeId(userId, userYoutubeId);
+      await firebaseService.db.updateUserYoutubeId(userId, user?.youtubeId);
     } catch (err) {
       return _getAuthenticationError(err.code);
     }
@@ -82,7 +82,7 @@ export function AuthProvider({ children }) {
 
   async function loginAsGuest(youtubeId) {
     return new Promise((resolve) => {
-      setUserYoutubeId(youtubeId, resolve("resolved"));
+      setUser(makeUser({ youtubeId }), resolve());
     });
   }
 
@@ -97,24 +97,20 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     firebaseService.auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
-        const user = makeUser({ id: userAuth.uid });
-        setUser(user);
+        const userId = userAuth.uid;
 
-        const { data } = await firebaseService.db.getUserData(user.id);
+        const { data } = await firebaseService.db.getUserData(userId);
         if (!data) return;
 
-        setUserYoutubeId(data.youtubeId);
+        const user = makeUser({ id: userId, youtubeId: data.youtubeId });
+
+        setUser((prevState) => ({ ...prevState, ...user }));
       } else {
-        setUser(makeUser());
-        setUserYoutubeId(null);
+        setUser();
       }
       setIsDoneAuthenticating(true);
     });
   }, []);
-
-  useEffect(() => {
-    setUser((prev) => makeUser({ ...prev, youtubeId: userYoutubeId }));
-  }, [userYoutubeId]);
 
   return (
     <AuthContext.Provider
@@ -124,7 +120,6 @@ export function AuthProvider({ children }) {
         user,
         userId: user?.id,
         logout,
-        userYoutubeId,
         isDoneAuthenticating,
         loginAsGuest,
       }}

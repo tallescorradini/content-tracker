@@ -14,7 +14,7 @@ import { ButtonLink } from "../../components/ButtonLink/ButtonLink";
 import { Alert } from "../../components/Alert/Alert";
 
 function Signup() {
-  const { signup } = useAuth();
+  const { signup, login } = useAuth();
   const router = useRouter();
   const { subscribe, onSubmit, values: formValues } = useForm(yup);
   const [showAlert, setShowAlert] = useState({ message: null });
@@ -61,6 +61,8 @@ function Signup() {
       });
       return;
     }
+
+    await login(email, password);
 
     router.replace("/favorites");
   }
