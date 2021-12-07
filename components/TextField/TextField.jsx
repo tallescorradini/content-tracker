@@ -16,9 +16,11 @@ export function TextField({
   return (
     <div className={styles.field} style={style}>
       <label htmlFor={name}>{label}</label>
-      <a href={helperLink} target="_blank" rel="noreferrer">
-        <IoIosHelpCircleOutline className={styles.helpIcon} />
-      </a>
+      {helperLink ? (
+        <a href={helperLink} target="_blank" rel="noreferrer">
+          <IoIosHelpCircleOutline className={styles.helpIcon} />
+        </a>
+      ) : null}
       <input name={name} id={name} type="text" {...rest} />
       {hasError ? (
         <ul className={styles.errorMessage}>
