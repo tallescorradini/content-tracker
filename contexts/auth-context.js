@@ -33,20 +33,21 @@ export function withAuth({
     // function to return the high order component
     function HOC(props) {
       // to decide what should happen after authentication is done
-      const { user, isDoneAuthenticating } = useContext(AuthContext);
+      const { user, isAuthenticating } = useContext(AuthContext);
       const router = useRouter();
       const [showComponent, setShowComponent] = useState(false);
 
       useEffect(() => {
-        if (!isDoneAuthenticating) return null;
+        if (privateRoute && isAuthenticating) return;
 
         if (privateRoute && user?.type === "UNKNOWN")
           return router.push("/login");
+
         if (restrictedRoute && user?.type === "USER")
           return router.replace("/favorites");
 
         setShowComponent(true);
-      }, [isDoneAuthenticating, user?.type]);
+      }, [isAuthenticating, user?.type]);
 
       return showComponent ? <Component {...props} /> : null;
     }
@@ -60,7 +61,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState();
-  const [isDoneAuthenticating, setIsDoneAuthenticating] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   async function signup(email, password) {
     try {
@@ -74,7 +75,9 @@ export function AuthProvider({ children }) {
 
   async function login(email, password) {
     try {
+      setIsAuthenticating(true);
       await firebaseService.auth.signIn(email, password);
+      setIsAuthenticating(false);
     } catch (err) {
       return _getAuthenticationError(err.code);
     }
@@ -82,13 +85,14 @@ export function AuthProvider({ children }) {
 
   async function loginAsGuest(youtubeId) {
     return new Promise((resolve) => {
-      setUser(makeUser({ youtubeId }), resolve());
+      setIsAuthenticating(true);
+      setUser(makeUser({ youtubeId }), resolve(setIsAuthenticating(false)));
     });
   }
 
   async function logout() {
     try {
-      firebaseService.auth.signOut();
+      await firebaseService.auth.signOut();
     } catch (err) {
       console.log(err);
     }
@@ -106,9 +110,8 @@ export function AuthProvider({ children }) {
 
         setUser((prevState) => ({ ...prevState, ...user }));
       } else {
-        setUser();
+        setUser(makeUser());
       }
-      setIsDoneAuthenticating(true);
     });
   }, []);
 
@@ -120,7 +123,7 @@ export function AuthProvider({ children }) {
         user,
         userId: user?.id,
         logout,
-        isDoneAuthenticating,
+        isAuthenticating,
         loginAsGuest,
       }}
     >
