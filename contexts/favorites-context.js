@@ -14,7 +14,7 @@ export function useFavorites() {
 export function FavoritesProvider({ children }) {
   const [folders, setFolders] = useState([]);
   const [notifications, setNotifications] = useState({});
-  const { userId, userYoutubeId, user } = useAuth();
+  const { user } = useAuth();
 
   function _getChannelId(url) {
     if (!url) return;
@@ -258,7 +258,11 @@ export function FavoritesProvider({ children }) {
   useEffect(() => {
     if (!user) return;
 
-    if (user.type === "UNKNOWN") return;
+    if (user.type === "UNKNOWN") {
+      setFolders([]);
+      setNotifications({});
+      return;
+    }
 
     if (user.type === "GUEST") {
       addUncategorizedFolder(user.youtubeId);
