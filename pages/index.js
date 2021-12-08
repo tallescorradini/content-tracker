@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
 import useForm from "../hooks/useForm";
 import * as yup from "yup";
 import { useState } from "react";
@@ -16,7 +15,6 @@ import { Alert } from "../components/Alert/Alert";
 import { useAuth, withAuth } from "../contexts/auth-context";
 
 function Home() {
-  const router = useRouter();
   const { subscribe, onSubmit, values } = useForm(yup);
   const [showAlert, setShowAlert] = useState({ message: "" });
   const { loginAsGuest } = useAuth();
@@ -44,10 +42,7 @@ function Home() {
     e.preventDefault();
 
     try {
-      await loginAsGuest(values.userChannelId);
-      router.push({
-        pathname: "/favorites",
-      });
+      await loginAsGuest(values.userChannelId, { redirectUri: "/favorites" });
     } catch (error) {
       const errorCode = error.response?.data?.code;
       setShowAlert({

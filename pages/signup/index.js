@@ -1,7 +1,6 @@
 import Head from "next/head";
 import * as yup from "yup";
 import { useState } from "react";
-import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
@@ -15,7 +14,6 @@ import { Alert } from "../../components/Alert/Alert";
 
 function Signup() {
   const { signup, login } = useAuth();
-  const router = useRouter();
   const { subscribe, onSubmit, values: formValues } = useForm(yup);
   const [showAlert, setShowAlert] = useState({ message: null });
   const { t } = useTranslation("signupPage");
@@ -62,9 +60,7 @@ function Signup() {
       return;
     }
 
-    await login(email, password);
-
-    router.replace("/favorites");
+    await login(email, password, { redirectUri: "/favorites" });
   }
 
   return (

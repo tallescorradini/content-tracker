@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
@@ -35,13 +34,11 @@ function getSortedChannelsByNotificationPresent(
 
 function FavoritesPage() {
   const { userId, logout } = useAuth({ privateRoute: true });
-  const router = useRouter();
   const { folders, notifications } = useFavorites();
   const { t } = useTranslation("favoritesPage");
 
   function handleLogout() {
-    logout();
-    router.replace("/");
+    logout({ redirectUri: "/" });
   }
 
   return (

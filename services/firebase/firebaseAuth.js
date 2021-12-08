@@ -17,7 +17,8 @@ export function onAuthStateChanged(callbackFunction) {
 }
 
 export async function signIn(email, password) {
-  await signInWithEmailAndPassword(auth, email, password);
+  const { user } = await signInWithEmailAndPassword(auth, email, password);
+  return { userId: user.uid };
 }
 
 export async function signOut() {

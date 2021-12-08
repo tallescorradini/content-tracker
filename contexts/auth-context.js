@@ -24,7 +24,6 @@ function _getAuthenticationError(errorCode) {
 }
 
 export function withAuth({
-  publicRoute,
   restrictedRoute = false,
   privateRoute = false,
 } = {}) {
@@ -33,21 +32,27 @@ export function withAuth({
     // function to return the high order component
     function HOC(props) {
       // to decide what should happen after authentication is done
-      const { user, isAuthenticating } = useContext(AuthContext);
+      const { user } = useContext(AuthContext);
       const router = useRouter();
       const [showComponent, setShowComponent] = useState(false);
 
       useEffect(() => {
-        if (privateRoute && isAuthenticating) return;
+        console.log(`withAuth ${router.pathname}`, { user });
 
-        if (privateRoute && user?.type === "UNKNOWN")
-          return router.push("/login");
+        if (privateRoute) {
+          if (showComponent) return; // once page is shown, no need to check for user
 
-        if (restrictedRoute && user?.type === "USER")
-          return router.replace("/favorites");
+          if (user === undefined) return; // when page is acessed manually or refreshed
+          if (user === null) return router.push("/login");
+          if (user.type === "USER" || user.type === "GUEST")
+            return setShowComponent(true);
+        }
 
-        setShowComponent(true);
-      }, [isAuthenticating, user?.type]);
+        if (restrictedRoute) {
+          if (!user) return setShowComponent(true);
+          if (user.type === "USER") return router.replace("/favorites");
+        }
+      }, [user]);
 
       return showComponent ? <Component {...props} /> : null;
     }
@@ -61,7 +66,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState();
-  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const router = useRouter();
 
   async function signup(email, password) {
     try {
@@ -73,26 +78,28 @@ export function AuthProvider({ children }) {
     }
   }
 
-  async function login(email, password) {
+  async function login(email, password, { redirectUri }) {
     try {
-      setIsAuthenticating(true);
-      await firebaseService.auth.signIn(email, password);
-      setIsAuthenticating(false);
+      const { userId } = await firebaseService.auth.signIn(email, password);
+      const { data } = await firebaseService.db.getUserData(userId);
+      if (!data) return;
+      const user = makeUser({ id: userId, youtubeId: data.youtubeId });
+
+      setUser(user, router.push(redirectUri));
     } catch (err) {
+      console.log(err);
       return _getAuthenticationError(err.code);
     }
   }
 
-  async function loginAsGuest(youtubeId) {
-    return new Promise((resolve) => {
-      setIsAuthenticating(true);
-      setUser(makeUser({ youtubeId }), resolve(setIsAuthenticating(false)));
-    });
+  async function loginAsGuest(youtubeId, { redirectUri }) {
+    setUser(makeUser({ youtubeId }), router.push(redirectUri));
   }
 
-  async function logout() {
+  async function logout({ redirectUri }) {
     try {
       await firebaseService.auth.signOut();
+      setUser(null, router.replace(redirectUri));
     } catch (err) {
       console.log(err);
     }
@@ -100,17 +107,15 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     firebaseService.auth.onAuthStateChanged(async (userAuth) => {
+      if (user !== undefined) return;
+
       if (userAuth) {
         const userId = userAuth.uid;
-
         const { data } = await firebaseService.db.getUserData(userId);
         if (!data) return;
-
-        const user = makeUser({ id: userId, youtubeId: data.youtubeId });
-
-        setUser((prevState) => ({ ...prevState, ...user }));
+        setUser(makeUser({ id: userId, youtubeId: data.youtubeId }));
       } else {
-        setUser(makeUser());
+        setUser(null);
       }
     });
   }, []);
@@ -123,7 +128,6 @@ export function AuthProvider({ children }) {
         user,
         userId: user?.id,
         logout,
-        isAuthenticating,
         loginAsGuest,
       }}
     >
