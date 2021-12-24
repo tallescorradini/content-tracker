@@ -37,8 +37,6 @@ export function withAuth({
       const [showComponent, setShowComponent] = useState(false);
 
       useEffect(() => {
-        console.log(`withAuth ${router.pathname}`, { user });
-
         if (privateRoute) {
           if (showComponent) return; // once page is shown, no need to check for user
 
